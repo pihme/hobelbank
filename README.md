@@ -4,6 +4,14 @@ A map of the workshop: how Hermetarium, Fregoli, grok-budget-mcp, claude-budget-
 
 This repo holds no code. It explains the pieces, where each one sits, and how they are meant to connect. Each piece's own repo stays the source of truth for what it does; this map only links them up.
 
+## The problem
+
+Agents come with a trade-off between autonomy and control. To do their best work they need as many rights as possible, and for coding agents shell access matters most. But an agent with a shell can step around other safety measures, for example by calling the Azure CLI directly instead of going through the Azure MCP server.
+
+Many approaches limit the tools an agent may use. In practical work, though, it keeps turning out that nobody can predict which tool an agent will need to solve a problem. That argues for giving it as many rights as possible, and doing that without any check would be reckless.
+
+So control is still needed: control the agent cannot get around, and control that needs no human. It decides on its own and never waits for anyone. The wall blocks by itself, and you hear about it afterwards; you are told, not asked to approve.
+
 ## The picture
 
 The pieces form three layers around one rule: **an agent may do anything inside its world, and everything that controls it lives outside, where it cannot reach.**
@@ -30,9 +38,8 @@ The full map with every piece follows after the table below.
 | Package proxy and AI security scanner | Wall service (or tool inside) | Idea with an architecture sketch | [Ideengarten](https://github.com/pihme/ideengarten/blob/main/wiki/security-scanner.md) |
 | Tree-shaker | Tool or inhabitant | Idea | [Ideengarten](https://github.com/pihme/ideengarten/blob/main/wiki/tree-shake.md) |
 | Git Warden | Guard between agents and GitHub | Spec draft | [Ideengarten](https://github.com/pihme/ideengarten/blob/main/wiki/git-warden.md) |
-| presets | Shared base for every repo | In use | [pihme/presets](https://github.com/pihme/presets) |
 
-Ideengarten and presets are private, so those links only work for collaborators.
+Ideengarten is private, so those links only work for collaborators.
 
 ![The full map: habitat with Fregoli and other inhabitants, Squid with a package proxy, a watching agent next to the supervisor, and Git Warden in front of GitHub](docs/images/map.svg)
 
