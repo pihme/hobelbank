@@ -117,11 +117,33 @@ What an agent with push access to a repository can break. Most of it can be repa
 
 ## Neighbours
 
-Projects outside this family that solve parts of the same problem are compared in [docs/neighbours.md](docs/neighbours.md).
+Projects outside this family that solve parts of the same problem. Technical comparison only, as of October 2026.
 
-## Vision
+### NVIDIA OpenShell
 
-_Not written yet._
+[OpenShell](https://github.com/NVIDIA/OpenShell) (Apache-2.0, Rust) runs autonomous agents in isolated sandboxes.
+
+- **Alike:** a wall around the agent, one controlled way out through a proxy, credentials kept outside, an audit log.
+- **Different:** the agent never runs as root and is restricted inside as well (Landlock, seccomp); Hermetarium lets it be root and relies on the wall alone.
+- **Different:** egress rules are policies per host, port and calling binary, with inspection of REST, GraphQL and MCP traffic, which means breaking TLS; Hermetarium uses a Squid allowlist and leaves TLS alone.
+- **Different:** a control plane with multi-tenancy, SDKs and a TUI; Hermetarium is a local tool without a control plane or telemetry.
+- **Touch points:** a package proxy or scanner as OpenShell middleware, Fregoli as an inhabitant of an OpenShell sandbox.
+
+### sandcastle
+
+[sandcastle](https://github.com/mattpocock/sandcastle) (MIT, TypeScript) orchestrates coding agents: one Git worktree or branch per task, the agent in a container, commits merged back.
+
+- **Alike:** agents work inside containers and their work comes back through Git.
+- **Different:** it is a workflow tool, not a wall. There is no egress control, API keys reach the container as environment variables, and the host's `.git` is mounted read-write ([sandcastle#1010](https://github.com/mattpocock/sandcastle/issues/1010)).
+- **Different:** it answers "how do many agents work in parallel"; Hermetarium answers "how does an agent not carry anything out".
+- **Touch point:** sandcastle has a documented sandbox-provider interface, so Hermetarium could in principle be one.
+
+### DeepSeek Harness
+
+[DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (MIT) is an agent harness built on Cordis.
+
+- **Alike:** Fregoli uses the same plugin kernel, Cordis, directly; it does not wrap the harness.
+- **Different:** its `ctx.sandbox` confines subprocesses on the real machine. A habitat is the opposite: the agent lives inside it.
 
 ## More
 

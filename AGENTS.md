@@ -4,16 +4,15 @@ This file is for the coding agent working in this repo. Read it at the start of 
 
 ## What this repo is
 
-**Hobelbank** is the map of the project family: how Hermetarium, Fregoli, grok-budget-mcp, claude-budget-mcp and the ideas without a repo yet (from the private Ideengarten) fit together. It holds docs only, no code. Main document: `README.md`; terms: `GLOSSARY.md`; neighbouring projects: `docs/neighbours.md`.
+**Hobelbank** is the map of the project family: how Hermetarium, Fregoli, grok-budget-mcp, claude-budget-mcp and the ideas without a repo yet (from the private Ideengarten) fit together. It holds docs only, no code. Main document: `README.md`; terms: `GLOSSARY.md`.
 
 License: **PolyForm Noncommercial 1.0.0** (`LICENSE`). Source-available, not OSI Open Source. Do not relicense to Apache/MIT/GPL.
 
 ## How to work here
 
-- Layout: `README.md` (overview, map, pieces, connections, principles, vision), `GLOSSARY.md`, `docs/neighbours.md`, `docs/agents/` (agent skill notes).
+- Layout: `README.md` (problem, map, pieces, connections, principles, risks, neighbours), `GLOSSARY.md`, `docs/images/` (generated diagrams), `docs/agents/` (agent skill notes).
 - Each piece's own repo is the source of truth. Only write what its code, docs, releases or open issues show; link instead of copying detail. Mark ideas and possible uses as such ("idea", "spec draft", "possible"), never as built.
 - When a piece changes (release, new repo, closed issue that the map mentions), update the table and the connections here too. The relation texts must agree with `family.json` of the websites.
-- The **Vision** section stays empty until the maintainer writes or approves it.
 - No business content: no prices, revenue goals, customers or monetisation plans. This repo is meant to become public.
 - Before it goes public: links to private repos (Ideengarten, presets) must be replaced or removed, and the history checked for content taken over from them.
 - No tests, CI or releases; Markdown must render on GitHub (check Mermaid diagrams).
