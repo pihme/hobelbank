@@ -74,9 +74,9 @@ Dashed lines and boxes are not built yet.
 
 ## Risks and measures
 
-The risks of giving an agent broad rights are leaking information, leaking or misusing secrets, downloading malicious code, a compromised agent (by prompt injection or otherwise), harmful changes to code, and harmful changes to infrastructure. Each measure below covers some of them; the OWASP IDs point to the [appendix](#appendix-owasp-lists).
+The risks of giving an agent broad rights are leaking information, leaking or misusing secrets, downloading malicious code, a compromised agent (by prompt injection or otherwise), harmful changes to code, and harmful changes to infrastructure. Each measure below reduces some of them, but none removes a risk completely; the OWASP IDs point to the [appendix](#appendix-owasp-lists).
 
-| Measure | State | Risks it covers | OWASP |
+| Measure | State | Reduces | OWASP |
 | --- | --- | --- | --- |
 | **The wall.** Everything the agent runs, including downloaded code, runs inside the habitat behind runc or Firecracker, and the habitat can be thrown away. | Built | Downloading malicious code, a compromised agent, harmful changes to infrastructure (the host is out of reach) | LLM05, ASI05, ASI08, ASI10 |
 | **One logged way out.** All traffic leaves through Squid, only to allowlisted destinations, and every request is logged. | Built | Leaking information, a compromised agent | LLM01, LLM02, ASI01, ASI02 |
@@ -84,7 +84,7 @@ The risks of giving an agent broad rights are leaking information, leaking or mi
 | **Package proxy and scanner.** Downloads are stored, scanned and served from the wall. | Planned | Downloading malicious code | LLM03, ASI04 |
 | **Git Warden.** Agents push to the warden instead of GitHub; it holds suspicious changes back and warns, and only it holds a GitHub credential. | Planned | Harmful changes to code, harmful changes to infrastructure, leaking or misusing secrets | LLM06, ASI02, ASI03 |
 
-Harmful changes to infrastructure are only partly covered. The wall protects the host, and Git Warden would catch infrastructure kept as code. But if a cloud API is on the allowlist and its key is added on the wall, an agent can call it directly, as with the Azure CLI in [The problem](#the-problem), and only the allowlist and the log stand in the way.
+Harmful changes to infrastructure are reduced the least. The wall protects the host, and Git Warden would catch infrastructure kept as code. But if a cloud API is on the allowlist and its key is added on the wall, an agent can call it directly, as with the Azure CLI in [The problem](#the-problem), and only the allowlist and the log stand in the way.
 
 ## Related work
 
