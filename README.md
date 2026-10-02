@@ -143,6 +143,7 @@ Smaller tools that each match one piece of the workshop. Most of them break TLS 
 | Package proxy and scanner | [Socket Firewall](https://docs.socket.dev/docs/socket-firewall-free) (free, not open source) | `sfw` checks npm, Python and Rust downloads, including transitive ones, against Socket's malware data. |
 | Package proxy and scanner | [supply-chain-firewall](https://github.com/DataDog/supply-chain-firewall) (Datadog, Apache-2.0) | Checks npm and PyPI installs against lists of malicious packages before they run. |
 | Git Warden | [Allstar](https://github.com/ossf/allstar) (OpenSSF, Apache-2.0) | GitHub App that watches repository settings and can enforce branch protection, including a ban on force pushes. It guards settings, not the content of a push. |
+| Git Warden | [Gitea Mirror](https://github.com/RayLabsHQ/gitea-mirror) (AGPL-3.0, TypeScript) | Mirrors GitHub repositories to Gitea or Forgejo. Before each sync it checks for force pushes and deleted branches and can hold the sync until someone approves it. That protects the mirror, not the remote; if the check itself fails, it syncs anyway. |
 | Git Warden | [force-push-scanner](https://github.com/x41sec/force-push-scanner) (X41, GPL-3.0) | Recovers history that was erased by force pushes on GitHub, for about 90 days. It works after the fact. |
 | Git Warden | [Legitify](https://github.com/legit-labs/legitify) (Legit Security, Apache-2.0) | Scans GitHub and GitLab organizations and repositories for risky settings. |
 
