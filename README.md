@@ -22,6 +22,8 @@ The pieces form three layers around one rule: **an agent may do anything inside 
 2. **Inhabitants.** Agents that live in a habitat and build software there. Fregoli is one of them; others can move in too.
 3. **Wall services.** Everything that sits on the wall, on the only network path: the I/O log today, a package proxy with a scanner later.
 
+Some wall services may use a model of their own, like the judge in Git Warden or the AI security scanner. Such **wall agents** are trusted more than inhabitants, because they see what crosses the wall and decide on it. In return they may do far less: no shell and no tools, only reading what they are handed and answering.
+
 Around the habitat sit tools the agents use, like grok-budget-mcp and claude-budget-mcp, and guards on the way to the Git remote, like Git Warden.
 
 ![The essential pieces: a supervisor starts an inhabitant behind a wall, and all its traffic leaves through Squid](docs/images/overview.svg)

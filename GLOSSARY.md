@@ -9,4 +9,5 @@ Words used the same way across all repos of the workshop.
 - **I/O log.** What crosses the wall, recorded on the supervisor (`io.jsonl`). The inhabitant cannot switch it off. Not the same as the session log, which records what the model sees and lives inside the habitat.
 - **Key injection.** API keys stay in the host-side ACL; Squid adds them to requests for allowed destinations, so they never exist inside the image.
 - **Wall service.** Anything that runs on the wall's network path rather than inside the habitat, such as the I/O log or a future package proxy.
+- **Wall agent.** A wall service that uses a model, such as Git Warden's judge. Trusted more than an inhabitant, but with no shell and no tools: it only reads what it is handed and answers.
 - **Cordis.** The plugin kernel Fregoli is built on ("everything is a plugin"), from the paper *A Programming Paradigm for Spatiotemporal Composability* (arXiv:2608.25512).
