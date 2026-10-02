@@ -123,28 +123,31 @@ Projects outside this family that solve parts of the same problem. Technical com
 
 [OpenShell](https://github.com/NVIDIA/OpenShell) (Apache-2.0, Rust) runs autonomous agents in isolated sandboxes.
 
-- **Alike:** a wall around the agent, one controlled way out through a proxy, credentials kept outside, an audit log.
-- **Different:** the agent never runs as root and is restricted inside as well (Landlock, seccomp); Hermetarium lets it be root and relies on the wall alone.
-- **Different:** egress rules are policies per host, port and calling binary, with inspection of REST, GraphQL and MCP traffic, which means breaking TLS; Hermetarium uses a Squid allowlist and leaves TLS alone.
-- **Different:** a control plane with multi-tenancy, SDKs and a TUI; Hermetarium is a local tool without a control plane or telemetry.
-- **Touch points:** a package proxy or scanner as OpenShell middleware, Fregoli as an inhabitant of an OpenShell sandbox.
+<table>
+<tr><th width="50%">Alike</th><th width="50%">Different</th></tr>
+<tr valign="top"><td><ul><li>A wall around the agent.</li><li>One controlled way out through a proxy.</li><li>Credentials kept outside.</li><li>An audit log.</li></ul></td><td><ul><li>The agent never runs as root and is also restricted inside (Landlock, seccomp). Hermetarium lets it be root and relies on the wall alone.</li><li>Egress rules are policies per host, port and calling binary, with inspection of REST, GraphQL and MCP traffic, which means breaking TLS. Hermetarium uses a Squid allowlist and leaves TLS alone.</li><li>A control plane with multi-tenancy, SDKs and a TUI. Hermetarium is a local tool without a control plane or telemetry.</li></ul></td></tr>
+<tr><td colspan="2"><strong>Touch points:</strong> a package proxy or scanner as OpenShell middleware, Fregoli as an inhabitant of an OpenShell sandbox.</td></tr>
+</table>
 
 ### sandcastle
 
 [sandcastle](https://github.com/mattpocock/sandcastle) (MIT, TypeScript) orchestrates coding agents: one Git worktree or branch per task, the agent in a container, commits merged back.
 
-- **Alike:** agents work inside containers and their work comes back through Git.
-- **Different:** it is a workflow tool, not a wall. There is no egress control, API keys reach the container as environment variables, and the host's `.git` is mounted read-write ([sandcastle#1010](https://github.com/mattpocock/sandcastle/issues/1010)).
-- **Different:** it answers "how do many agents work in parallel"; Hermetarium answers "how does an agent not carry anything out".
-- **Touch point:** sandcastle has a documented sandbox-provider interface, so Hermetarium could in principle be one.
+<table>
+<tr><th width="50%">Alike</th><th width="50%">Different</th></tr>
+<tr valign="top"><td><ul><li>Agents work inside containers.</li><li>Their work comes back through Git.</li></ul></td><td><ul><li>A workflow tool, not a wall: no egress control, API keys reach the container as environment variables, and the host's <code>.git</code> is mounted read-write (<a href="https://github.com/mattpocock/sandcastle/issues/1010">sandcastle#1010</a>).</li><li>It answers "how do many agents work in parallel". Hermetarium answers "how does an agent not carry anything out".</li></ul></td></tr>
+<tr><td colspan="2"><strong>Touch points:</strong> sandcastle has a documented sandbox-provider interface, so Hermetarium could in principle be one.</td></tr>
+</table>
 
 ### Claude Code devcontainer
 
 Anthropic's [devcontainer for Claude Code](https://code.claude.com/docs/en/devcontainer) lets the agent run without asking for permission inside a container whose outgoing connections are limited by a firewall.
 
-- **Alike:** the agent may do anything inside, and an allowlist decides where it can connect.
-- **Different:** the firewall ([`init-firewall.sh`](https://github.com/anthropics/claude-code/blob/main/.devcontainer/init-firewall.sh)) is set up with iptables inside the container itself, which gets `NET_ADMIN`. The agent runs as a normal user and may only run that one script with sudo, so the control sits in the agent's own world and holds only as long as the agent does not become root. In Hermetarium the agent is root and the control still sits outside.
-- **Different:** the firewall keeps no log of what goes out, and Claude Code's login lives in a volume inside the container instead of being added on the way out.
+<table>
+<tr><th width="50%">Alike</th><th width="50%">Different</th></tr>
+<tr valign="top"><td><ul><li>The agent may do anything inside.</li><li>An allowlist decides where it can connect.</li></ul></td><td><ul><li>The firewall (<a href="https://github.com/anthropics/claude-code/blob/main/.devcontainer/init-firewall.sh"><code>init-firewall.sh</code></a>) is set up with iptables inside the container itself, which gets <code>NET_ADMIN</code>. The agent runs as a normal user and may only run that one script with sudo, so the control holds only as long as the agent does not become root. In Hermetarium the agent is root and the control still sits outside.</li><li>The firewall keeps no log of what goes out.</li><li>Claude Code's login lives in a volume inside the container instead of being added on the way out.</li></ul></td></tr>
+<tr><td colspan="2"><strong>Touch points:</strong> none so far.</td></tr>
+</table>
 
 ## More
 
