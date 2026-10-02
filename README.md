@@ -76,44 +76,14 @@ Dashed lines and boxes are not built yet.
 
 ## Risks
 
-What an agent with push access to a repository can break. Most of it can be repaired with Git and GitHub; leaked secrets, published packages and exfiltrated data cannot. The IDs stay stable, so other documents can refer to them.
+What can go wrong when an agent gets broad rights:
 
-**Inside the repository**
-
-- **R1, rewrite history.** Force-pushes, deleted branches and tags, or a rewritten history.
-- **R2, delete or damage code.** Loud and usually easy to repair.
-- **R3, subtle bugs and backdoors.** A weakened check, a new dependency or a changed lockfile that nobody reviews.
-- **R4, secrets in commits.** Once pushed, a secret has to be revoked; deleting the commit is not enough.
-- **R5, licence problems.** Copied code under an incompatible licence, or a changed `LICENSE` file.
-- **R6, spam.** Masses of commits, issues, releases or comments under the owner's name.
-
-**Supply chain**
-
-- **R7, change CI workflows.** Whoever can write workflows runs code with the repository's secrets.
-- **R8, move tags.** A release tag is quietly pointed at a malicious commit.
-- **R9, malicious releases and packages.** Bad code is published and installed by others.
-- **R10, dependency confusion.** A public package with an internal package's name gets installed instead.
-- **R11, poison the website.** A site built from the repository serves phishing or malware.
-
-**Beyond the repository**
-
-- **R12, token reach.** A token meant for one repository works on every repository of the account.
-- **R13, settings and access.** Visibility, collaborators, deploy keys, webhooks or protection rules are changed.
-- **R14, exfiltration.** Private content ends up in gists, new public repositories or public pull requests.
-
-**Agent-specific**
-
-- **R15, prompt injection.** Issues, READMEs or comments carry instructions the agent follows.
-- **R16, agents used by malware.** Malicious code calls installed agent CLIs or steals their tokens.
-- **R17, slopsquatting.** An attacker registers a package name that models tend to invent.
-- **R18, mistakes without an attacker.** An agent does damage on its own; instructions in a prompt are no access control.
-
-**Guards and backups**
-
-- **R19, naive mirrors.** A mirror that syncs blindly copies the destruction too.
-- **R20, compromised guard.** Any review or bot service that holds write access is a target itself.
-- **R21, AI gatekeepers can be talked round.** Well-crafted pull request texts get vulnerable changes past AI reviewers.
-- **R22, data outside Git.** Issues, pull request discussions, releases and settings are not in a `git clone --mirror`.
+- **Leaking information.** Private code or data leaves the agent's world.
+- **Leaking or misusing secrets.** Keys and tokens are copied out or used for things they were not meant for.
+- **Downloading malicious code.** A package or tool the agent fetches carries harmful code.
+- **A compromised agent.** Prompt injection or another attack makes the agent work for someone else.
+- **Harmful changes to code.** The agent breaks code or slips in subtle bugs and backdoors, by mistake or on purpose.
+- **Harmful changes to infrastructure.** Settings, access rights, CI workflows or published releases are changed.
 
 ## Related work
 
