@@ -126,6 +126,26 @@ Anthropic's [devcontainer for Claude Code](https://code.claude.com/docs/en/devco
 <tr><td colspan="2"><strong>Touch points:</strong> none so far.</td></tr>
 </table>
 
+### More projects, by counterpart
+
+Smaller tools that each match one piece of the workshop. Most of them break TLS to look inside requests, which Hermetarium does not do.
+
+| Counterpart | Project | What it does |
+| --- | --- | --- |
+| One logged way out | [httpjail](https://github.com/coder/httpjail) (CC0, Rust, experimental) | Wraps a single process, denies all requests by default, filters with JavaScript rules down to method and path, and logs every request. It runs next to the process, not behind a separate wall. |
+| One logged way out, keys on the wall | [iron-proxy](https://github.com/ironsh/iron-proxy) (Apache-2.0, Go) | Default-deny egress proxy with its own DNS server and a JSON log per request. The workload only gets proxy tokens, which are swapped for real keys on the way out. |
+| One logged way out | [OpenSandbox Egress](https://open-sandbox.ai/components/egress) | DNS-based allowlist as a sidecar that fails closed if it cannot be enforced. Optional TLS interception and key injection. |
+| One logged way out | [Smokescreen](https://github.com/stripe/smokescreen) (MIT, Go) | Stripe's egress proxy with host rules per client that also blocks internal addresses. Built for servers, not agents. |
+| Keys on the wall | [Agent Vault](https://github.com/infisical/agent-vault) (Infisical, MIT with an enterprise part) | Vault and proxy in one: the agent only holds placeholders, and the real keys are added on the way out. Meant to run on a different machine than the agent. |
+| Keys on the wall | [tokenizer](https://github.com/superfly/tokenizer) (Fly.io, Apache-2.0) | The client sends an encrypted secret that only the proxy can open, and the proxy adds it to the request. The client holds the secret in sealed form instead of not at all. |
+| Package proxy and scanner | [pkggate](https://github.com/daneb255/pkggate) (MIT) | Self-hosted registry proxy for npm and PyPI with a local OSV mirror and an audit log. It can block packages with install scripts. Closest in design, but a small project. |
+| Package proxy and scanner | [Safe Chain](https://github.com/AikidoSec/safe-chain) (Aikido, AGPL or commercial) | Local proxy in front of npm, PyPI and other package managers. It blocks known malware and packages younger than 48 hours. |
+| Package proxy and scanner | [Socket Firewall](https://docs.socket.dev/docs/socket-firewall-free) (free, not open source) | `sfw` checks npm, Python and Rust downloads, including transitive ones, against Socket's malware data. |
+| Package proxy and scanner | [supply-chain-firewall](https://github.com/DataDog/supply-chain-firewall) (Datadog, Apache-2.0) | Checks npm and PyPI installs against lists of malicious packages before they run. |
+| Git Warden | [Allstar](https://github.com/ossf/allstar) (OpenSSF, Apache-2.0) | GitHub App that watches repository settings and can enforce branch protection, including a ban on force pushes. It guards settings, not the content of a push. |
+| Git Warden | [force-push-scanner](https://github.com/x41sec/force-push-scanner) (X41, GPL-3.0) | Recovers history that was erased by force pushes on GitHub, for about 90 days. It works after the fact. |
+| Git Warden | [Legitify](https://github.com/legit-labs/legitify) (Legit Security, Apache-2.0) | Scans GitHub and GitLab organizations and repositories for risky settings. |
+
 ## More
 
 - [GLOSSARY.md](GLOSSARY.md): the words used across the workshop (habitat, inhabitant, wall, supervisor).
