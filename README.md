@@ -69,6 +69,14 @@ Ideengarten and presets are private, so those links only work for collaborators.
 - **The tree-shaker uses what the proxy saw.** It finds dependencies that are barely used and rewrites that code, so less foreign code comes in. It could work from exactly what the proxy served.
 - **Git Warden keeps GitHub credentials out of habitats.** Agents push to the warden instead of GitHub; only the warden holds a write credential. That is the same idea as key injection, applied to Git.
 
+## Design philosophy
+
+1. **Keep it simple.** Each piece does one job with as few moving parts as it can. A small piece is easier to check, to replace and to trust.
+2. **Set and forget.** You set up an agent's world once, and after that the agent never stops to ask you for permission. That does not mean everything is allowed: the decisions live outside, where the agent cannot reach them. Inside the habitat the agent may do anything. What leaves it is checked on the way out, by the wall and its log today and by Git Warden later. When something looks wrong, the agent does not ask for an exception: the wall says no, or Git Warden holds the change and alerts you.
+3. **Batteries included, assembly required.** Together the pieces make a working setup, but it is meant to be adapted to your own needs: your images, your allowlists, your agents.
+4. **Bricks, not a stack.** The pieces fit together, and each one can be swapped for something else that does the same job: another habitat, another inhabitant, another proxy.
+5. **The good side of Pareto.** Aim for the solution that solves 80% of the problems with a fraction of the effort, and leave the rest out rather than make everything heavier.
+
 ## Shared principles
 
 - Freedom inside, control outside. The agent cannot switch off the wall or its log.
