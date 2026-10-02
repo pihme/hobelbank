@@ -10,7 +10,7 @@ License: **PolyForm Noncommercial 1.0.0** (`LICENSE`). Source-available, not OSI
 
 ## How to work here
 
-- Layout: `README.md` (problem, map, pieces, connections, principles, risks, neighbours), `GLOSSARY.md`, `docs/images/` (generated diagrams), `docs/agents/` (agent skill notes).
+- Layout: `README.md` (problem, map, pieces, connections, principles, risks, related work), `GLOSSARY.md`, `docs/images/` (generated diagrams), `docs/agents/` (agent skill notes).
 - Each piece's own repo is the source of truth. Only write what its code, docs, releases or open issues show; link instead of copying detail. Mark ideas and possible uses as such ("idea", "spec draft", "possible"), never as built.
 - When a piece changes (release, new repo, closed issue that the map mentions), update the table and the connections here too. The relation texts must agree with `family.json` of the websites.
 - No business content: no prices, revenue goals, customers or monetisation plans. This repo is meant to become public.

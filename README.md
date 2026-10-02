@@ -115,7 +115,7 @@ What an agent with push access to a repository can break. Most of it can be repa
 - **R21, AI gatekeepers can be talked round.** Well-crafted pull request texts get vulnerable changes past AI reviewers.
 - **R22, data outside Git.** Issues, pull request discussions, releases and settings are not in a `git clone --mirror`.
 
-## Neighbours
+## Related work
 
 Projects outside this family that solve parts of the same problem. Technical comparison only, as of October 2026.
 
