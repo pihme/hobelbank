@@ -80,7 +80,7 @@ The risks of giving an agent broad rights are leaking information, leaking or mi
 | --- | --- | --- | --- |
 | **The wall.** Everything the agent runs, including downloaded code, runs inside the habitat behind runc or Firecracker, and the habitat can be thrown away. | Built | Downloading malicious code, a compromised agent, harmful changes to infrastructure (the host is out of reach) | LLM05, ASI05, ASI08, ASI10 |
 | **One logged way out.** All traffic leaves through Squid, only to allowlisted destinations, and every request is logged. | Built | Leaking information, a compromised agent | LLM01, LLM02, ASI01, ASI02 |
-| **Keys on the wall.** API keys never enter the habitat; Squid adds them on the way out. | Built | Leaking or misusing secrets | LLM07, ASI03 |
+| **Keys on the wall.** API keys never enter the habitat; Squid adds them on the way out. | Built | Leaking or misusing secrets | ASI03 |
 | **Package proxy and scanner.** Downloads are stored, scanned and served from the wall. | Planned | Downloading malicious code | LLM03, ASI04 |
 | **Git Warden.** Agents push to the warden instead of GitHub; it holds suspicious changes back and warns, and only it holds a GitHub credential. | Planned | Harmful changes to code, harmful changes to infrastructure, leaking or misusing secrets | LLM06, ASI02, ASI03 |
 
