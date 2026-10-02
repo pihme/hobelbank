@@ -84,6 +84,8 @@ The risks of giving an agent broad rights are leaking information, leaking or mi
 | **Package proxy and scanner.** Downloads are stored, scanned and served from the wall. | Planned | Downloading malicious code | LLM03, ASI04 |
 | **Git Warden.** Agents push to the warden instead of GitHub; it holds suspicious changes back and warns, and only it holds a GitHub credential. | Planned | Harmful changes to code, harmful changes to infrastructure, leaking or misusing secrets | LLM06, ASI02, ASI03 |
 
+Harmful changes to infrastructure are only partly covered. The wall protects the host, and Git Warden would catch infrastructure kept as code. But if a cloud API is on the allowlist and its key is added on the wall, an agent can call it directly, as with the Azure CLI in [The problem](#the-problem), and only the allowlist and the log stand in the way.
+
 ## Related work
 
 Projects outside this family that solve parts of the same problem. Technical comparison only, as of October 2026.
