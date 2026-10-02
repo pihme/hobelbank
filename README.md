@@ -146,13 +146,6 @@ Anthropic's [devcontainer for Claude Code](https://code.claude.com/docs/en/devco
 - **Different:** the firewall ([`init-firewall.sh`](https://github.com/anthropics/claude-code/blob/main/.devcontainer/init-firewall.sh)) is set up with iptables inside the container itself, which gets `NET_ADMIN`. The agent runs as a normal user and may only run that one script with sudo, so the control sits in the agent's own world and holds only as long as the agent does not become root. In Hermetarium the agent is root and the control still sits outside.
 - **Different:** the firewall keeps no log of what goes out, and Claude Code's login lives in a volume inside the container instead of being added on the way out.
 
-### DeepSeek Harness
-
-[DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (MIT) is an agent harness built on Cordis.
-
-- **Alike:** Fregoli uses the same plugin kernel, Cordis, directly; it does not wrap the harness.
-- **Different:** its `ctx.sandbox` confines subprocesses on the real machine. A habitat is the opposite: the agent lives inside it.
-
 ## More
 
 - [GLOSSARY.md](GLOSSARY.md): the words used across the family (habitat, inhabitant, wall, supervisor).
