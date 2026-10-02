@@ -14,34 +14,9 @@ The pieces form three layers around one rule: **an agent may do anything inside 
 
 Around the habitat sit tools the agents use, like grok-budget-mcp and claude-budget-mcp, and guards on the way to GitHub, like Git Warden.
 
-```mermaid
-flowchart TB
-  subgraph host["Host: operator's machine or cluster"]
-    sup["Supervisor (Hermetarium, Go)"]
-    subgraph wall["Wall: runc (weak) or Firecracker (strong)"]
-      subgraph hab["Habitat: OCI image, agent is root"]
-        fre["Fregoli (inhabitant)"]
-        other["Other agents (inhabitants)"]
-        gbm1["grok-budget-mcp / claude-budget-mcp (possible)"]
-        ts["Tree-shaker (idea)"]
-      end
-    end
-    squid["Squid: only network path, I/O log, key injection"]
-    proxy["Package proxy + scanner (idea)"]
-    watch["Watching agent + budget MCP (possible)"]
-  end
-  warden["Git Warden (idea): push, merge and pull guards"]
-  gh["GitHub"]
-  net["Internet"]
+![The essential pieces: a supervisor starts an inhabitant behind a wall, and all its traffic leaves through Squid](docs/images/overview.svg)
 
-  sup --> wall
-  hab --> squid --> net
-  squid -.-> proxy
-  watch -.-> sup
-  hab -.-> warden --> gh
-```
-
-Dashed lines are not built yet.
+The full map with every piece follows after the table below.
 
 ## The pieces
 
@@ -58,6 +33,10 @@ Dashed lines are not built yet.
 | presets | Shared base for every repo | In use | [pihme/presets](https://github.com/pihme/presets) |
 
 Ideengarten and presets are private, so those links only work for collaborators.
+
+![The full map: habitat with Fregoli and other inhabitants, Squid with a package proxy, a watching agent next to the supervisor, and Git Warden in front of GitHub](docs/images/map.svg)
+
+Dashed lines and boxes are not built yet.
 
 ## How they connect
 

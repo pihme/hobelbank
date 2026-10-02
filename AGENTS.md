@@ -61,3 +61,7 @@ Default roles: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human
 ### Domain docs
 
 Single-context: no `SPEC.md` here; terms in root `GLOSSARY.md`. See `docs/agents/domain.md`.
+
+## Diagrams
+
+`docs/images/overview.svg` and `docs/images/map.svg` are generated in the same style as the family's other architecture diagrams. Change the generator and re-run it; do not edit the SVGs by hand.
