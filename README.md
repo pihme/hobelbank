@@ -94,6 +94,8 @@ Projects outside the workshop that solve parts of the same problem. Technical co
 
 [OpenShell](https://github.com/NVIDIA/OpenShell) (Apache-2.0, Rust) runs autonomous agents in isolated sandboxes.
 
+**Counterpart in the workshop:** Hermetarium as a whole, meaning the wall, Squid as the one way out, and keys on the wall.
+
 <table>
 <tr><th width="50%">Alike</th><th width="50%">Different</th></tr>
 <tr valign="top"><td><ul><li>A wall around the agent.</li><li>One controlled way out through a proxy.</li><li>Credentials kept outside.</li><li>An audit log.</li></ul></td><td><ul><li>The agent never runs as root and is also restricted inside (Landlock, seccomp). Hermetarium lets it be root and relies on the wall alone.</li><li>Egress rules are policies per host, port and calling binary, with inspection of REST, GraphQL and MCP traffic, which means breaking TLS. Hermetarium uses a Squid allowlist and leaves TLS alone.</li><li>A control plane with multi-tenancy, SDKs and a TUI. Hermetarium is a local tool without a control plane or telemetry.</li></ul></td></tr>
@@ -104,6 +106,8 @@ Projects outside the workshop that solve parts of the same problem. Technical co
 
 [sandcastle](https://github.com/mattpocock/sandcastle) (MIT, TypeScript) orchestrates coding agents: one Git worktree or branch per task, the agent in a container, commits merged back.
 
+**Counterpart in the workshop:** the Hermetarium supervisor, which starts habitats. Bringing work back through Git touches what Git Warden is meant to check.
+
 <table>
 <tr><th width="50%">Alike</th><th width="50%">Different</th></tr>
 <tr valign="top"><td><ul><li>Agents work inside containers.</li><li>Their work comes back through Git.</li></ul></td><td><ul><li>A workflow tool, not a wall: no egress control, API keys reach the container as environment variables, and the host's <code>.git</code> is mounted read-write (<a href="https://github.com/mattpocock/sandcastle/issues/1010">sandcastle#1010</a>).</li><li>It answers "how do many agents work in parallel". Hermetarium answers "how does an agent not carry anything out".</li></ul></td></tr>
@@ -113,6 +117,8 @@ Projects outside the workshop that solve parts of the same problem. Technical co
 ### Claude Code devcontainer
 
 Anthropic's [devcontainer for Claude Code](https://code.claude.com/docs/en/devcontainer) lets the agent run without asking for permission inside a container whose outgoing connections are limited by a firewall.
+
+**Counterpart in the workshop:** the Hermetarium wall together with the Squid allowlist.
 
 <table>
 <tr><th width="50%">Alike</th><th width="50%">Different</th></tr>
