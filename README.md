@@ -22,7 +22,7 @@ The pieces form three layers around one rule: **an agent may do anything inside 
 2. **Inhabitants.** Agents that live in a habitat and build software there. Fregoli is one of them; others can move in too.
 3. **Wall services.** Everything that sits on the wall, on the only network path: the I/O log today, a package proxy with a scanner later.
 
-Around the habitat sit tools the agents use, like grok-budget-mcp and claude-budget-mcp, and guards on the way to GitHub, like Git Warden.
+Around the habitat sit tools the agents use, like grok-budget-mcp and claude-budget-mcp, and guards on the way to the Git remote, like Git Warden.
 
 ![The essential pieces: a supervisor starts an inhabitant behind a wall, and all its traffic leaves through Squid](docs/images/overview.svg)
 
@@ -38,11 +38,11 @@ The full map with every piece follows after the table below.
 | **grok-budget-mcp** | Tool for agents | Released (v1.0.0) | [pihme/grok-budget-mcp](https://github.com/pihme/grok-budget-mcp) |
 | **claude-budget-mcp** | Tool for agents | Released (v0.1.0), not yet tested live | [pihme/claude-budget-mcp](https://github.com/pihme/claude-budget-mcp) |
 | Package proxy and AI security scanner | Wall service (or tool inside) | Idea with an architecture sketch | [Ideengarten](https://github.com/pihme/ideengarten/blob/main/wiki/security-scanner.md) |
-| Git Warden | Guard between agents and GitHub | Early draft | [Ideengarten](https://github.com/pihme/ideengarten/blob/main/wiki/git-warden.md) |
+| Git Warden | Guard between agents and their Git remote | Early draft | [Ideengarten](https://github.com/pihme/ideengarten/blob/main/wiki/git-warden.md) |
 
 Ideengarten is private, so those links only work for collaborators.
 
-![The full map: habitat with Fregoli and other inhabitants, Squid with a package proxy, a watching agent next to the supervisor, and Git Warden in front of GitHub](docs/images/map.svg)
+![The full map: habitat with Fregoli and other inhabitants, Squid with a package proxy, a watching agent next to the supervisor, and Git Warden in front of the Git remote](docs/images/map.svg)
 
 Dashed lines and boxes are not built yet.
 
@@ -53,7 +53,7 @@ Dashed lines and boxes are not built yet.
 - **claude-budget-mcp is the same tool for Claude Code.** It reads the 5-hour and weekly limits from Claude Code's own login and never refreshes the token, so everything said here about grok-budget-mcp applies to it too. Inside a habitat its placeholder would be a `.credentials.json`.
 - **grok-budget-mcp has two possible places.** Inside a habitat, an agent asks how much of its weekly budget is left. Next to the supervisor, a watching agent could put a habitat to sleep when the budget is empty and wake it after the reset. Hermetarium has no sleep and wake yet, and keeping a changed world is still open ([hermetarium#9](https://github.com/pihme/hermetarium/issues/9)).
 - **The scanner shares the wall.** Every package fetch already crosses Squid. A package proxy there would store, scan and re-serve what agents download, using the same choke point and log as the I/O log.
-- **Git Warden would keep GitHub credentials out of habitats.** The rough idea: agents push to the warden instead of GitHub, and only the warden can write there. It is key injection, applied to Git.
+- **Git Warden would keep Git credentials out of habitats.** The rough idea: agents push to the warden instead of their Git remote (GitHub, GitLab or any other), and only the warden can write there. It is key injection, applied to Git.
 
 ## Design philosophy
 
@@ -82,13 +82,13 @@ The risks of giving an agent broad rights are leaking information, leaking or mi
 | **One logged way out.** All traffic leaves through Squid, only to allowlisted destinations, and every request is logged. | Built | Leaking information, a compromised agent | LLM01, LLM02, ASI01, ASI02 |
 | **Keys on the wall.** API keys never enter the habitat; Squid adds them on the way out. | Built | Leaking or misusing secrets | ASI03 |
 | **Package proxy and scanner.** Downloads are stored, scanned and served from the wall. | Planned | Downloading malicious code | LLM03, ASI04 |
-| **Git Warden.** Agents push to the warden instead of GitHub; it holds suspicious changes back and warns, and only it holds a GitHub credential. | Planned | Harmful changes to code, harmful changes to infrastructure, leaking or misusing secrets | LLM06, ASI02, ASI03 |
+| **Git Warden.** Agents push to the warden instead of their Git remote; it holds suspicious changes back and warns, and only it holds the credential for the remote. | Planned | Harmful changes to code, harmful changes to infrastructure, leaking or misusing secrets | LLM06, ASI02, ASI03 |
 
 Harmful changes to infrastructure are reduced the least. The wall protects the host, and Git Warden would catch infrastructure kept as code. But if a cloud API is on the allowlist and its key is added on the wall, an agent can call it directly, as with the Azure CLI in [The problem](#the-problem), and only the allowlist and the log stand in the way.
 
 ## Related work
 
-Projects outside this family that solve parts of the same problem. Technical comparison only, as of October 2026.
+Projects outside the workshop that solve parts of the same problem. Technical comparison only, as of October 2026.
 
 ### NVIDIA OpenShell
 
@@ -122,12 +122,12 @@ Anthropic's [devcontainer for Claude Code](https://code.claude.com/docs/en/devco
 
 ## More
 
-- [GLOSSARY.md](GLOSSARY.md): the words used across the family (habitat, inhabitant, wall, supervisor).
+- [GLOSSARY.md](GLOSSARY.md): the words used across the workshop (habitat, inhabitant, wall, supervisor).
 - [CONTRIBUTING.md](CONTRIBUTING.md): issues are welcome.
 
 ## Appendix: OWASP lists
 
-How the family answers the [OWASP Top 10 for LLM Applications 2025](https://genai.owasp.org/llm-top-10/) and the [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/). **Yes** means today's pieces address it directly but cannot rule it out, **partly** that today's pieces limit the damage but do not prevent it, **planned** that it depends on a piece that is not built yet, and **no** that it is outside what this family does.
+How the workshop answers the [OWASP Top 10 for LLM Applications 2025](https://genai.owasp.org/llm-top-10/) and the [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/). **Yes** means today's pieces address it directly but cannot rule it out, **partly** that today's pieces limit the damage but do not prevent it, **planned** that it depends on a piece that is not built yet, and **no** that it is outside what the workshop does.
 
 ### LLM Applications 2025
 
@@ -136,12 +136,12 @@ How the family answers the [OWASP Top 10 for LLM Applications 2025](https://gena
 | LLM01 | Prompt Injection | Partly | The injection itself is not stopped. An injected agent can only reach allowlisted destinations, holds no keys, and every request is logged. |
 | LLM02 | Sensitive Information Disclosure | Partly | Data can only leave through Squid to allowlisted destinations, and every request is logged. Allowed destinations such as model APIs remain a way out. |
 | LLM03 | Supply Chain | Partly | Every package fetch crosses Squid and is logged. Scanning what comes in is planned (package proxy and scanner). |
-| LLM04 | Data and Model Poisoning | No | Training data and models are outside this family. |
+| LLM04 | Data and Model Poisoning | No | Training data and models are outside the workshop. |
 | LLM05 | Improper Output Handling | Partly | Whatever the agent runs from model output runs inside the habitat, behind the wall, and the habitat can be thrown away. |
-| LLM06 | Excessive Agency | Partly | The agent gets broad rights on purpose, and the wall limits what they reach outside. Checking pushes to GitHub is planned (Git Warden). |
+| LLM06 | Excessive Agency | Partly | The agent gets broad rights on purpose, and the wall limits what they reach outside. Checking pushes to the Git remote is planned (Git Warden). |
 | LLM07 | System Prompt Leakage | No | Prompts are the inhabitant's business. Keys are never in them, because they are added on the wall. |
-| LLM08 | Vector and Embedding Weaknesses | No | Outside this family. |
-| LLM09 | Misinformation | No | Outside this family. |
+| LLM08 | Vector and Embedding Weaknesses | No | Outside the workshop. |
+| LLM09 | Misinformation | No | Outside the workshop. |
 | LLM10 | Unbounded Consumption | Partly | grok-budget-mcp and claude-budget-mcp show how much budget is left. Putting a habitat to sleep when it runs out is not built yet. |
 
 ### Agentic Applications 2026
@@ -149,8 +149,8 @@ How the family answers the [OWASP Top 10 for LLM Applications 2025](https://gena
 | ID | Risk | Addressed | How |
 | --- | --- | --- | --- |
 | ASI01 | Agent Goal Hijack | Partly | As with LLM01: a hijacked agent stays behind the wall, with no keys and a logged, allowlisted way out. |
-| ASI02 | Tool Misuse and Exploitation | Partly | Tools run inside the habitat, so their effects outside are limited to the allowlist. Checking what reaches GitHub is planned (Git Warden). |
-| ASI03 | Identity and Privilege Abuse | Partly | API keys never enter the habitat; Squid adds them on the way out. Keeping GitHub credentials out is planned (Git Warden). |
+| ASI02 | Tool Misuse and Exploitation | Partly | Tools run inside the habitat, so their effects outside are limited to the allowlist. Checking what reaches the Git remote is planned (Git Warden). |
+| ASI03 | Identity and Privilege Abuse | Partly | API keys never enter the habitat; Squid adds them on the way out. Keeping Git credentials out is planned (Git Warden). |
 | ASI04 | Agentic Supply Chain Vulnerabilities | Partly | Downloads are logged at the wall. Scanning them is planned (package proxy and scanner). |
 | ASI05 | Unexpected Code Execution | Yes | Running code is expected: it runs inside the habitat, behind runc or, for a stronger wall, Firecracker, and the habitat can be thrown away. |
 | ASI06 | Memory and Context Poisoning | No | An agent's memory is the inhabitant's business. |

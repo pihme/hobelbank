@@ -1,6 +1,6 @@
 # Glossary
 
-Words used the same way across all repos of the family.
+Words used the same way across all repos of the workshop.
 
 - **Habitat.** The world an agent wakes up in: an OCI image it may use freely as root. Provided by Hermetarium. A common noun, not a product name.
 - **Inhabitant.** An agent that lives in a habitat. Fregoli is one; any agent can be one.

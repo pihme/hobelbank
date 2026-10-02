@@ -4,7 +4,7 @@ How agents and skills consume this repo's domain documentation.
 
 ## Before exploring, read these
 
-- **`README.md`**: what the family is and how the pieces fit. Decisions live in each piece's own repo (its `SPEC.md`) and in Ideengarten.
+- **`README.md`**: what the workshop is and how the pieces fit. Decisions live in each piece's own repo (its `SPEC.md`) and in Ideengarten.
 - **`GLOSSARY.md`** at the repo root, if it exists. If it does not, proceed silently; it is created lazily (for example by `/domain-modeling`) when terms actually get resolved.
 - **`AGENTS.md`**: working rules and the "Do not invent" list.
 

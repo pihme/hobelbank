@@ -4,7 +4,7 @@ This file is for the coding agent working in this repo. Read it at the start of 
 
 ## What this repo is
 
-**Hobelbank** is the map of the project family: how Hermetarium, Fregoli, grok-budget-mcp, claude-budget-mcp and the ideas without a repo yet (from the private Ideengarten) fit together. It holds docs only, no code. Main document: `README.md`; terms: `GLOSSARY.md`.
+**Hobelbank** is the map of the workshop: how Hermetarium, Fregoli, grok-budget-mcp, claude-budget-mcp and the ideas without a repo yet (from the private Ideengarten) fit together. It holds docs only, no code. Main document: `README.md`; terms: `GLOSSARY.md`.
 
 License: **PolyForm Noncommercial 1.0.0** (`LICENSE`). Source-available, not OSI Open Source. Do not relicense to Apache/MIT/GPL.
 
@@ -40,7 +40,7 @@ License: **PolyForm Noncommercial 1.0.0** (`LICENSE`). Source-available, not OSI
 
 ### Website
 
-- None yet. If one comes, the family website rules from presets apply.
+- None yet. If one comes, the website rules from presets apply.
 
 ## Do not invent
 
@@ -63,4 +63,4 @@ Single-context: no `SPEC.md` here; terms in root `GLOSSARY.md`. See `docs/agents
 
 ## Diagrams
 
-`docs/images/overview.svg` and `docs/images/map.svg` are generated in the same style as the family's other architecture diagrams. Change the generator and re-run it; do not edit the SVGs by hand.
+`docs/images/overview.svg` and `docs/images/map.svg` are generated in the same style as the other projects' architecture diagrams. Change the generator and re-run it; do not edit the SVGs by hand.
