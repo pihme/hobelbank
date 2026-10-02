@@ -62,6 +62,7 @@ Dashed lines and boxes are not built yet.
 3. **Batteries included, assembly required.** Together the pieces make a working setup, but it is meant to be adapted to your own needs: your images, your allowlists, your agents.
 4. **Bricks, not a stack.** The pieces fit together, and each one can be swapped for something else that does the same job: another habitat, another inhabitant, another proxy.
 5. **The good side of Pareto.** Aim for the solution that solves 80% of the problems with a fraction of the effort, and leave the rest out rather than make everything heavier.
+6. **The show must go on.** A check never stops the job. When Git Warden finds a suspicious change, it does not mirror it to GitHub and warns you, but the agent keeps working in its habitat. You look at the warning when it suits you, and the mirror catches up later. What leaves may be held back; the work itself goes on.
 
 ## Shared principles
 
