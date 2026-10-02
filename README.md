@@ -83,6 +83,8 @@ What can go wrong when an agent gets broad rights:
 - **Harmful changes to code.** The agent breaks code or slips in subtle bugs and backdoors, by mistake or on purpose.
 - **Harmful changes to infrastructure.** Settings, access rights, CI workflows or published releases are changed.
 
+The [appendix](#appendix-owasp-lists) checks this family against the two OWASP top 10 lists.
+
 ## Related work
 
 Projects outside this family that solve parts of the same problem. Technical comparison only, as of October 2026.
@@ -121,3 +123,37 @@ Anthropic's [devcontainer for Claude Code](https://code.claude.com/docs/en/devco
 
 - [GLOSSARY.md](GLOSSARY.md): the words used across the family (habitat, inhabitant, wall, supervisor).
 - [CONTRIBUTING.md](CONTRIBUTING.md): issues are welcome.
+
+## Appendix: OWASP lists
+
+How the family answers the [OWASP Top 10 for LLM Applications 2025](https://genai.owasp.org/llm-top-10/) and the [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/). **Yes** means it is covered today, **partly** that today's pieces limit the damage but do not prevent it, **planned** that it depends on a piece that is not built yet, and **no** that it is outside what this family does.
+
+### LLM Applications 2025
+
+| ID | Risk | Addressed | How |
+| --- | --- | --- | --- |
+| LLM01 | Prompt Injection | Partly | The injection itself is not stopped. An injected agent can only reach allowlisted destinations, holds no keys, and every request is logged. |
+| LLM02 | Sensitive Information Disclosure | Partly | Data can only leave through Squid to allowlisted destinations, and every request is logged. Allowed destinations such as model APIs remain a way out. |
+| LLM03 | Supply Chain | Partly | Every package fetch crosses Squid and is logged. Scanning what comes in is planned (package proxy and scanner). |
+| LLM04 | Data and Model Poisoning | No | Training data and models are outside this family. |
+| LLM05 | Improper Output Handling | Partly | Whatever the agent runs from model output runs inside the habitat, behind the wall, and the habitat can be thrown away. |
+| LLM06 | Excessive Agency | Partly | The agent gets broad rights on purpose, and the wall limits what they reach outside. Checking pushes to GitHub is planned (Git Warden). |
+| LLM07 | System Prompt Leakage | No | Prompts are the inhabitant's business. Keys are never in them, because they are added on the wall. |
+| LLM08 | Vector and Embedding Weaknesses | No | Outside this family. |
+| LLM09 | Misinformation | No | Outside this family. |
+| LLM10 | Unbounded Consumption | Partly | grok-budget-mcp and claude-budget-mcp show how much budget is left. Putting a habitat to sleep when it runs out is not built yet. |
+
+### Agentic Applications 2026
+
+| ID | Risk | Addressed | How |
+| --- | --- | --- | --- |
+| ASI01 | Agent Goal Hijack | Partly | As with LLM01: a hijacked agent stays behind the wall, with no keys and a logged, allowlisted way out. |
+| ASI02 | Tool Misuse and Exploitation | Partly | Tools run inside the habitat, so their effects outside are limited to the allowlist. Checking what reaches GitHub is planned (Git Warden). |
+| ASI03 | Identity and Privilege Abuse | Partly | API keys never enter the habitat; Squid adds them on the way out. Keeping GitHub credentials out is planned (Git Warden). |
+| ASI04 | Agentic Supply Chain Vulnerabilities | Partly | Downloads are logged at the wall. Scanning them is planned (package proxy and scanner). |
+| ASI05 | Unexpected Code Execution | Yes | Running code is expected: it runs inside the habitat, behind runc or, for a stronger wall, Firecracker, and the habitat can be thrown away. |
+| ASI06 | Memory and Context Poisoning | No | An agent's memory is the inhabitant's business. |
+| ASI07 | Insecure Inter-Agent Communication | No | Not addressed yet. |
+| ASI08 | Cascading Failures | Partly | Each agent lives in its own habitat, so a failure inside one stays there. |
+| ASI09 | Human-Agent Trust Exploitation | Partly | The agent never asks for approval, so there is no prompt to talk a person into. Warnings from Git Warden will come with the held change itself, not the agent's explanation; that part is planned. |
+| ASI10 | Rogue Agents | Partly | A rogue agent cannot switch off the wall or its log, and it can be stopped and its habitat thrown away. |
