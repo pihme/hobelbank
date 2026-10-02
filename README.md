@@ -127,7 +127,7 @@ Anthropic's [devcontainer for Claude Code](https://code.claude.com/docs/en/devco
 
 ## Appendix: OWASP lists
 
-How the family answers the [OWASP Top 10 for LLM Applications 2025](https://genai.owasp.org/llm-top-10/) and the [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/). **Yes** means today's pieces address it directly, though they do not rule it out, **partly** that today's pieces limit the damage but do not prevent it, **planned** that it depends on a piece that is not built yet, and **no** that it is outside what this family does.
+How the family answers the [OWASP Top 10 for LLM Applications 2025](https://genai.owasp.org/llm-top-10/) and the [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/). **Yes** means today's pieces address it directly but cannot rule it out, **partly** that today's pieces limit the damage but do not prevent it, **planned** that it depends on a piece that is not built yet, and **no** that it is outside what this family does.
 
 ### LLM Applications 2025
 
