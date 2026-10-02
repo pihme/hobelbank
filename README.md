@@ -138,6 +138,14 @@ Projects outside this family that solve parts of the same problem. Technical com
 - **Different:** it answers "how do many agents work in parallel"; Hermetarium answers "how does an agent not carry anything out".
 - **Touch point:** sandcastle has a documented sandbox-provider interface, so Hermetarium could in principle be one.
 
+### Claude Code devcontainer
+
+Anthropic's [devcontainer for Claude Code](https://code.claude.com/docs/en/devcontainer) lets the agent run without asking for permission inside a container whose outgoing connections are limited by a firewall.
+
+- **Alike:** the agent may do anything inside, and an allowlist decides where it can connect.
+- **Different:** the firewall ([`init-firewall.sh`](https://github.com/anthropics/claude-code/blob/main/.devcontainer/init-firewall.sh)) is set up with iptables inside the container itself, which gets `NET_ADMIN`. The agent runs as a normal user and may only run that one script with sudo, so the control sits in the agent's own world and holds only as long as the agent does not become root. In Hermetarium the agent is root and the control still sits outside.
+- **Different:** the firewall keeps no log of what goes out, and Claude Code's login lives in a volume inside the container instead of being added on the way out.
+
 ### DeepSeek Harness
 
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (MIT) is an agent harness built on Cordis.
