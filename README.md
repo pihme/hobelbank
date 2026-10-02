@@ -155,5 +155,5 @@ How the family answers the [OWASP Top 10 for LLM Applications 2025](https://gena
 | ASI06 | Memory and Context Poisoning | No | An agent's memory is the inhabitant's business. |
 | ASI07 | Insecure Inter-Agent Communication | No | Not addressed yet. |
 | ASI08 | Cascading Failures | Partly | Each agent lives in its own habitat, so a failure inside one stays there. |
-| ASI09 | Human-Agent Trust Exploitation | Partly | The agent never asks for approval, so there is no prompt to talk a person into. Warnings from Git Warden will come with the held change itself, not the agent's explanation; that part is planned. |
+| ASI09 | Human-Agent Trust Exploitation | Partly | The agent never asks for approval, so there is no prompt to talk a person into. |
 | ASI10 | Rogue Agents | Partly | A rogue agent cannot switch off the wall or its log, and it can be stopped and its habitat thrown away. |
