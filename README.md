@@ -40,7 +40,7 @@ The full map with every piece follows after the table below.
 | **grok-budget-mcp** | Tool for agents | Released (v1.0.0) | [pihme/grok-budget-mcp](https://github.com/pihme/grok-budget-mcp) |
 | **claude-budget-mcp** | Tool for agents | Released (v0.1.0), not yet tested live | [pihme/claude-budget-mcp](https://github.com/pihme/claude-budget-mcp) |
 | Package proxy and AI security scanner | Wall service (or tool inside) | Idea with an architecture sketch | [Ideengarten](https://github.com/pihme/ideengarten/blob/main/wiki/security-scanner.md) |
-| Git Warden | Guard between agents and their Git remote | Early draft | [Ideengarten](https://github.com/pihme/ideengarten/blob/main/wiki/git-warden.md) |
+| Git Warden | Guards between agents and their Git remote: a Push Guard that checks every push, a Pull Guard that backs up every branch and tag | Built (`push-guard`, `pull-guard`), not in use yet | [Ideengarten](https://github.com/pihme/ideengarten/blob/main/wiki/git-warden.md) |
 
 Ideengarten is private, so those links only work for collaborators.
 
@@ -84,7 +84,7 @@ The risks of giving an agent broad rights are leaking information, leaking or mi
 | **One logged way out.** All traffic leaves through Squid, only to allowlisted destinations, and every request is logged. | Built | Leaking information, a compromised agent | LLM01, LLM02, ASI01, ASI02 |
 | **Keys on the wall.** API keys never enter the habitat; Squid adds them on the way out. | Built | Leaking or misusing secrets | ASI03 |
 | **Package proxy and scanner.** Downloads are stored, scanned and served from the wall. | Planned | Downloading malicious code | LLM03, ASI04 |
-| **Git Warden.** Agents push to the warden instead of their Git remote; it holds suspicious changes back and warns, and only it holds the credential for the remote. | Planned | Harmful changes to code, harmful changes to infrastructure, leaking or misusing secrets | LLM06, ASI02, ASI03 |
+| **Git Warden.** Agents push to the warden instead of their Git remote; it holds suspicious changes back and warns, and only it holds the credential for the remote. A separate Pull Guard keeps an append-only backup of every branch and tag. | Built, not in use yet | Harmful changes to code, harmful changes to infrastructure, leaking or misusing secrets | LLM06, ASI02, ASI03 |
 
 Harmful changes to infrastructure are reduced the least. The wall protects the host, and Git Warden would catch infrastructure kept as code. But if a cloud API is on the allowlist and its key is added on the wall, an agent can call it directly, as with the Azure CLI in [The problem](#the-problem), and only the allowlist and the log stand in the way.
 
@@ -167,7 +167,7 @@ How the workshop answers the [OWASP Top 10 for LLM Applications 2025](https://ge
 | LLM03 | Supply Chain | Partly | Every package fetch crosses Squid and is logged. Scanning what comes in is planned (package proxy and scanner). |
 | LLM04 | Data and Model Poisoning | No | Training data and models are outside the workshop. |
 | LLM05 | Improper Output Handling | Partly | Whatever the agent runs from model output runs inside the habitat, behind the wall, and the habitat can be thrown away. |
-| LLM06 | Excessive Agency | Partly | The agent gets broad rights on purpose, and the wall limits what they reach outside. Checking pushes to the Git remote is planned (Git Warden). |
+| LLM06 | Excessive Agency | Partly | The agent gets broad rights on purpose, and the wall limits what they reach outside. Checking pushes to the Git remote is built but not in use yet (Git Warden). |
 | LLM07 | System Prompt Leakage | No | Prompts are the inhabitant's business. Keys are never in them, because they are added on the wall. |
 | LLM08 | Vector and Embedding Weaknesses | No | Outside the workshop. |
 | LLM09 | Misinformation | No | Outside the workshop. |
@@ -178,8 +178,8 @@ How the workshop answers the [OWASP Top 10 for LLM Applications 2025](https://ge
 | ID | Risk | Addressed | How |
 | --- | --- | --- | --- |
 | ASI01 | Agent Goal Hijack | Partly | As with LLM01: a hijacked agent stays behind the wall, with no keys and a logged, allowlisted way out. |
-| ASI02 | Tool Misuse and Exploitation | Partly | Tools run inside the habitat, so their effects outside are limited to the allowlist. Checking what reaches the Git remote is planned (Git Warden). |
-| ASI03 | Identity and Privilege Abuse | Partly | API keys never enter the habitat; Squid adds them on the way out. Keeping Git credentials out is planned (Git Warden). |
+| ASI02 | Tool Misuse and Exploitation | Partly | Tools run inside the habitat, so their effects outside are limited to the allowlist. Checking what reaches the Git remote is built but not in use yet (Git Warden). |
+| ASI03 | Identity and Privilege Abuse | Partly | API keys never enter the habitat; Squid adds them on the way out. Keeping Git credentials out is built but not in use yet (Git Warden). |
 | ASI04 | Agentic Supply Chain Vulnerabilities | Partly | Downloads are logged at the wall. Scanning them is planned (package proxy and scanner). |
 | ASI05 | Unexpected Code Execution | Yes | Running code is expected: it runs inside the habitat, behind runc or, for a stronger wall, Firecracker, and the habitat can be thrown away. |
 | ASI06 | Memory and Context Poisoning | No | An agent's memory is the inhabitant's business. |
