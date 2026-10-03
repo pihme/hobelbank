@@ -24,7 +24,7 @@ The pieces form three layers around one rule: **an agent may do anything inside 
 
 Some wall services may use a model of their own, like the AI security scanner. Such **wall agents** are trusted more than inhabitants, because they see what crosses the wall and decide on it. In return they may do far less: no shell and no tools, only reading what they are handed and answering.
 
-Around the habitat sit tools the agents use, like grok-budget-mcp and claude-budget-mcp, and guards on the way to the Git remote, like Git Warden.
+Around the habitat sit tools the agents use, like grok-budget-mcp and claude-budget-mcp, and guards on the way to the Git remote, like Git Warden. Helferlein is a building block for the pages an inhabitant serves, not part of the wall.
 
 ![The essential pieces: a supervisor starts an inhabitant behind a wall, and all its traffic leaves through Squid](docs/images/overview.svg)
 
@@ -41,8 +41,9 @@ The full map with every piece follows after the table below.
 | **claude-budget-mcp** | Tool for agents | Released (v0.1.0), not yet tested live | [pihme/claude-budget-mcp](https://github.com/pihme/claude-budget-mcp) |
 | Package proxy and AI security scanner | Wall service (or tool inside) | Idea with an architecture sketch | [Ideengarten](https://github.com/pihme/ideengarten/blob/main/wiki/security-scanner.md) |
 | **Git Warden** | Guards between agents and their Git remote: a Push Guard that checks every push, a Backup Guard that keeps an append-only backup of every branch and tag | Released (v0.4.0), not in use yet | [pihme/git-warden](https://github.com/pihme/git-warden) |
+| **Helferlein** | Building block for an app's web page, outside the three layers: an animated 3D avatar that shows when an agent is working | Released (v0.1.0), not used by any piece yet | [pihme/helferlein](https://github.com/pihme/helferlein) |
 
-Ideengarten is private, so those links only work for collaborators.
+Ideengarten and Helferlein are private for now, so those links only work for collaborators.
 
 ![The full map: habitat with Fregoli and other inhabitants, Squid with a package proxy, a watching agent next to the supervisor, and Git Warden in front of the Git remote](docs/images/map.svg)
 
@@ -56,6 +57,7 @@ Dashed lines and boxes are not built yet.
 - **grok-budget-mcp has two possible places.** Inside a habitat, an agent asks how much of its weekly budget is left. Next to the supervisor, a watching agent could put a habitat to sleep when the budget is empty and wake it after the reset. Hermetarium has no sleep and wake yet, and keeping a changed world is still open ([hermetarium#9](https://github.com/pihme/hermetarium/issues/9)).
 - **The scanner shares the wall.** Every package fetch already crosses Squid. A package proxy there would store, scan and re-serve what agents download, using the same choke point and log as the I/O log.
 - **Git Warden keeps Git credentials out of habitats.** Agents push to the warden instead of their Git remote (GitHub, GitLab or any other), and only the warden can write there. It is key injection, applied to Git. Built and released, not in use yet ([pihme/git-warden](https://github.com/pihme/git-warden)).
+- **Helferlein could give an inhabitant's web app a face.** It is an animated 3D avatar that a page summons and drives with events: working while a turn runs, applied when the finished work is on the page, dismiss when the panel closes. Its own demo is such a host, a chat in the lower right. A possible host is an app like Fregoli with its assistant chat; no piece uses it yet, and Helferlein names no host itself ([pihme/helferlein](https://github.com/pihme/helferlein)).
 
 ## Design philosophy
 
