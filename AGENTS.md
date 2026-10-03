@@ -4,7 +4,7 @@ This file is for the coding agent working in this repo. Read it at the start of 
 
 ## What this repo is
 
-**Hobelbank** is the map of the workshop: how Hermetarium, Fregoli, grok-budget-mcp, claude-budget-mcp and the ideas without a repo yet (from the private Ideengarten) fit together. It holds docs only, no code. Main document: `README.md`; terms: `GLOSSARY.md`.
+**Hobelbank** is the map of the workshop: how Hermetarium, Fregoli, grok-budget-mcp, claude-budget-mcp, Git Warden, Helferlein and the ideas without a repo yet (from the private Ideengarten) fit together. It holds docs only, no code. Main document: `README.md`; terms: `GLOSSARY.md`.
 
 License: **PolyForm Noncommercial 1.0.0** (`LICENSE`). Source-available, not OSI Open Source. Do not relicense to Apache/MIT/GPL.
 
