@@ -189,3 +189,7 @@ How the workshop answers the [OWASP Top 10 for LLM Applications 2025](https://ge
 | ASI08 | Cascading Failures | Partly | Each agent lives in its own habitat, so a failure inside one stays there. |
 | ASI09 | Human-Agent Trust Exploitation | Partly | The agent never asks for approval, so there is no prompt to talk a person into. |
 | ASI10 | Rogue Agents | Partly | A rogue agent cannot switch off the wall or its log, and it can be stopped and its habitat thrown away. |
+
+## License
+
+[PolyForm Noncommercial License 1.0.0](LICENSE). Source-available; not OSI Open Source. Commercial use is not granted. Other licenses can be negotiated with the copyright holder.
