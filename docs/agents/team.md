@@ -79,6 +79,11 @@ Not wanted: scope extensions or new work during a release; design decisions (des
 
 Before handing anything over, check for duplicate PRs and open work on the same files.
 
+### Long-running operations
+
+- Never wait in the foreground for longer than 2 minutes.
+- Start long operations (CI runs, Docker builds, renders, long test runs) in the background and check on them only briefly, at most every 1–2 minutes, so that new messages are noticed in between.
+
 ### Releases
 
 - Exactly one open release PR.
@@ -94,6 +99,7 @@ Before handing anything over, check for duplicate PRs and open work on the same 
 - Checks every Dependabot PR and hands it to QA or the owner (see Dependabot PRs).
 - Release owner: prepares the release PR and checks for duplicate release PRs before and after every merge.
 - Never merges.
+- One quick fix is fine; if it does not solve the problem, report it to the coordination role first (not the owner) or open a PR with the root-cause fix, never try the next fix silently.
 
 **Post-release check:**
 - Tag exists and matches the released version.
