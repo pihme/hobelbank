@@ -130,6 +130,18 @@ Anthropic's [devcontainer for Claude Code](https://code.claude.com/docs/en/devco
 <tr><td colspan="2"><strong>Touch points:</strong> none so far.</td></tr>
 </table>
 
+### boxd self-host
+
+[boxd self-host](https://github.com/boxd-sh/self-host) (installer under Apache-2.0, the boxd binaries under a separate license) runs a complete boxd cluster in your own Google Cloud project, AWS account or on your own servers: microVMs that can be forked and snapshotted, spread over node roles for control, workers, proxy, console, DNS and metrics. Without a license key, the workers may have up to 16 vCPUs in all.
+
+**Counterpart in the workshop:** the Hermetarium supervisor, which starts habitats.
+
+<table>
+<tr><th width="50%">Alike</th><th width="50%">Different</th></tr>
+<tr valign="top"><td><ul><li>Workloads run in isolated environments.</li></ul></td><td><ul><li>boxd is a cluster. Hermetarium is meant for a few containers, not many.</li></ul></td></tr>
+<tr><td colspan="2"><strong>Touch points:</strong> none so far.</td></tr>
+</table>
+
 ### More projects, by counterpart
 
 Smaller tools that each match one piece of the workshop. Most of them break TLS to look inside requests, which Hermetarium does not do.
