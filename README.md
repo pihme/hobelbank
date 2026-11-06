@@ -39,11 +39,11 @@ The full map with every piece follows after the table below.
 | **Fregoli** | Inhabitant | Released (v0.3.2) | [pihme/fregoli](https://github.com/pihme/fregoli) · [website](https://pihme.github.io/fregoli/) |
 | **grok-budget-mcp** | Tool for agents | Released (v1.0.0) | [pihme/grok-budget-mcp](https://github.com/pihme/grok-budget-mcp) · [website](https://pihme.github.io/grok-budget-mcp/) |
 | **claude-budget-mcp** | Tool for agents | Released (v1.0.0), not yet tested live | [pihme/claude-budget-mcp](https://github.com/pihme/claude-budget-mcp) · [website](https://pihme.github.io/claude-budget-mcp/) |
-| Package proxy and AI security scanner | Wall service (or tool inside) | Idea with an architecture sketch | [Ideengarten](https://github.com/pihme/ideengarten/blob/main/wiki/security-scanner.md) |
+| Package proxy and AI security scanner | Wall service (or tool inside) | Idea with an architecture sketch | Not public yet |
 | **Git Warden** | Guards between agents and their Git remote: a Push Guard that checks every push, a Backup Guard that keeps an append-only backup of every branch and tag | Released (v0.4.0), not in use yet | [pihme/git-warden](https://github.com/pihme/git-warden) · [website](https://pihme.github.io/git-warden/) |
 | **Helferlein** | Building block for an app's web page, outside the three layers: an animated 3D avatar that shows when an agent is working | Released (v0.1.2), not used by any piece yet | [pihme/helferlein](https://github.com/pihme/helferlein) · [website](https://pihme.github.io/helferlein/) |
 
-Ideengarten is private for now, so those links only work for collaborators. All released pieces are public and have their own website.
+All released pieces are public and have their own website.
 
 ![The full map: habitat with Fregoli and other inhabitants, Squid with a package proxy, a watching agent next to the supervisor, and Git Warden in front of the Git remote](docs/images/map.svg)
 
