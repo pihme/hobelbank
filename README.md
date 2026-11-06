@@ -46,7 +46,7 @@ The full map with every piece follows after the table below.
 | Sandbox logging | Wall service, part of Hermetarium | Built: Squid access log turned into `io.jsonl`, metadata only | [Hermetarium](https://github.com/pihme/hermetarium) |
 | **Fregoli** | Inhabitant | Released (v0.3.2) | [pihme/fregoli](https://github.com/pihme/fregoli) · [website](https://pihme.github.io/fregoli/) |
 | **grok-budget-mcp** | Tool for agents | Released (v1.0.0) | [pihme/grok-budget-mcp](https://github.com/pihme/grok-budget-mcp) · [website](https://pihme.github.io/grok-budget-mcp/) |
-| **claude-budget-mcp** | Tool for agents | Released (v1.0.0), not yet tested live | [pihme/claude-budget-mcp](https://github.com/pihme/claude-budget-mcp) · [website](https://pihme.github.io/claude-budget-mcp/) |
+| **claude-budget-mcp** | Tool for agents | Released (v1.0.0), tested live | [pihme/claude-budget-mcp](https://github.com/pihme/claude-budget-mcp) · [website](https://pihme.github.io/claude-budget-mcp/) |
 | Package proxy and AI security scanner | Wall service (or tool inside) | Idea with an architecture sketch | Not public yet |
 | **Git Warden** | Guards between agents and their Git remote: a Push Guard that checks every push, a Backup Guard that keeps an append-only backup of every branch and tag | Released (v0.4.0), not in use yet | [pihme/git-warden](https://github.com/pihme/git-warden) · [website](https://pihme.github.io/git-warden/) |
 | **Helferlein** | Building block for an app's web page, outside the three layers: an animated 3D avatar that shows when an agent is working | Released (v0.1.2), not used by any piece yet | [pihme/helferlein](https://github.com/pihme/helferlein) · [website](https://pihme.github.io/helferlein/) |
