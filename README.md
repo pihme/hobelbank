@@ -14,13 +14,13 @@ This repo holds no code. It explains the pieces, where each one sits, and how th
 
 ## The problem
 
-What follows is what we have run into so far and the working hypothesis the workshop is built on, not a settled finding.
+What follows is what I have run into so far and the working hypothesis the workshop is built on, not a settled finding.
 
-Working with agents, we keep running into a trade-off between autonomy and control. Agents seem to do their best work with broad rights, and for coding agents shell access has mattered most. But an agent with a shell can step around other safety measures, for example by calling the Azure CLI directly instead of going through the Azure MCP server.
+Working with agents, I keep running into a trade-off between autonomy and control. Agents seem to do their best work with broad rights, and for coding agents shell access has mattered most. But an agent with a shell can step around other safety measures, for example by calling the Azure CLI directly instead of going through the Azure MCP server.
 
-Many approaches limit the tools an agent may use. In our practical work, though, we have rarely been able to predict which tool an agent would need to solve a problem. That points towards giving it broad rights, and doing that without any check seems reckless.
+Many approaches limit the tools an agent may use. In my practical work, though, I have rarely been able to predict which tool an agent would need to solve a problem. That points towards giving it broad rights, and doing that without any check seems reckless.
 
-Our working hypothesis is that control is still needed, but of a particular kind: control the agent cannot get around, and control that needs no human. It decides on its own and never waits for anyone. The wall blocks by itself, and you hear about it afterwards; you are told, not asked to approve.
+My working hypothesis is that control is still needed, but of a particular kind: control the agent cannot get around, and control that needs no human. It decides on its own and never waits for anyone. The wall blocks by itself, and you hear about it afterwards; you are told, not asked to approve.
 
 Simon Willison calls the dangerous mix the [lethal trifecta](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/): access to private data, exposure to untrusted content, and a way to send data out. The wall works on the third part without taking tools away from the agent. It does not close the way out completely: only allowlisted destinations such as model APIs and package registries are reachable, and every request is logged.
 
