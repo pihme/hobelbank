@@ -178,6 +178,13 @@ Smaller tools that each match one piece of the workshop. Most of them break TLS 
 - [GLOSSARY.md](GLOSSARY.md): the words used across the workshop (habitat, inhabitant, wall, supervisor).
 - [CONTRIBUTING.md](CONTRIBUTING.md): issues are welcome.
 
+## Roadmap
+
+Planned milestones; neither has been released yet.
+
+- **1.0:** MVPs for all components, tested with a closed-source agent harness.
+- **2.0:** All components work together as an integrated system, with an open-source agent harness as the reference implementation.
+
 ## Appendix: OWASP lists
 
 How the workshop answers the [OWASP Top 10 for LLM Applications 2025](https://genai.owasp.org/llm-top-10/) and the [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/). **Yes** means today's pieces address it directly but cannot rule it out, **partly** that today's pieces limit the damage but do not prevent it, **planned** that it depends on a piece that is not built yet, and **no** that it is outside what the workshop does.
