@@ -8,7 +8,7 @@
 
 # Hobelbank
 
-A map of the workshop: how Hermetarium, Fregoli, grok-budget-mcp, claude-budget-mcp and the ideas that do not have a repo yet fit together.
+Hobelbank is the umbrella over the projects below. They share one question: how do you build software in the age of AI? Each project takes on one part of the answer, from the world an agent works in to the guards on its way out.
 
 This repo holds no code. It explains the pieces, where each one sits, and how they are meant to connect. Each piece's own repo stays the source of truth for what it does; this map only links them up.
 
