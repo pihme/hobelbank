@@ -120,6 +120,25 @@ main ul>li::before{content:"";position:absolute;left:-1.1rem;top:.45em;width:.5e
   linear-gradient(90deg,var(--slate) 0 50%,var(--acc) 50% 100%) 18% 0/16px 14px no-repeat}
 
 .dx-sub-on{opacity:1}
+/* Hobelbank link on Jigsaw pages (variant A, r2)
+   Family sites are light-only: no dark override. Square corners like .card.
+   --hb-wood: edge/decoration; --hb-wood-text: text (AA, ~5.3:1 on the tint). */
+:root{--hb-wood:#a8742a;--hb-wood-text:#8a5a2b}
+.hb-cap{
+  display:flex;align-items:center;gap:.9rem;max-width:36rem;
+  margin:1.1rem 0 0;padding:.85rem 1.1rem .9rem;
+  border:1.5px solid var(--line);
+  border-top:3px solid transparent;
+  border-image:linear-gradient(90deg,var(--slate) 0 50%,var(--hb-wood) 50% 100%) 1;
+  background:color-mix(in srgb,var(--hb-wood) 6%,var(--bg));
+  text-decoration:none;color:inherit;
+}
+.hb-cap:hover{background:color-mix(in srgb,var(--hb-wood) 11%,var(--bg))}
+.hb-cap:focus-visible{outline:2px solid var(--slate);outline-offset:2px}
+.hb-cap .hb-mark{width:2.25rem;height:2.25rem;flex:none}
+.hb-cap .hb-t{display:flex;flex-direction:column;gap:.15rem;min-width:0}
+.hb-cap .hb-t strong{font:700 1rem/1.25 system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--fg)}
+.hb-cap .hb-t em{font:italic .9rem/1.35 "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;color:var(--hb-wood-text)}
 
 .period{max-width:46rem}.period h2{font-size:1.3rem}.period h2 .span{color:var(--mut);font-weight:400;font-size:.95rem}
 .period p{font:1.12rem/1.8 "Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;margin:0}
@@ -148,4 +167,4 @@ main ul>li::before{content:"";position:absolute;left:-1.1rem;top:.45em;width:.5e
 <dialog class="cfbox" aria-label="Enlarged Code Fireworks render"><img alt="" width="900" height="900"><button type="button" class="cfx" aria-label="Close">&times;</button></dialog>
 <script>(function(){var d=document.querySelector('.cfbox');if(!d||!d.showModal)return;var i=d.querySelector('img');
 document.querySelectorAll('a.cfz').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();i.src=a.href;i.alt=a.querySelector('img').alt;d.showModal();});});
-d.addEventListener('click',function(){d.close();});d.addEventListener('close',function(){i.removeAttribute('src');});})();</script><footer>Last updated 2026-11-06 · generated from <a href="https://github.com/pihme/hobelbank/tree/0efffd18232256f9f01ea92d0fb500bd2cdec220"><code>main@0efffd1</code></a> · <a href="https://github.com/pihme/hobelbank/blob/main/LICENSE">PolyForm Noncommercial 1.0.0</a> (source-available, not OSI Open Source)</footer></main></body></html>
+d.addEventListener('click',function(){d.close();});d.addEventListener('close',function(){i.removeAttribute('src');});})();</script><footer>Last updated 2026-11-07 · generated from <a href="https://github.com/pihme/hobelbank/tree/0efffd18232256f9f01ea92d0fb500bd2cdec220"><code>main@0efffd1</code></a> · <a href="https://github.com/pihme/hobelbank/blob/main/LICENSE">PolyForm Noncommercial 1.0.0</a> (source-available, not OSI Open Source)</footer></main></body></html>
