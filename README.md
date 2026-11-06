@@ -1,3 +1,11 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/hobelbank-logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="docs/assets/hobelbank-logo-light.svg">
+    <img src="docs/assets/hobelbank-logo-universal.svg" width="120" alt="Hobelbank logo">
+  </picture>
+</p>
+
 # Hobelbank
 
 A map of the workshop: how Hermetarium, Fregoli, grok-budget-mcp, claude-budget-mcp and the ideas that do not have a repo yet fit together.
