@@ -183,7 +183,7 @@ Smaller tools that each match one piece of the workshop. Most of them break TLS 
 Planned milestones; neither has been released yet.
 
 - **1.0:** MVPs for all components, tested with a closed-source agent harness.
-- **2.0:** All components work together as an integrated system, with an open-source agent harness as the reference implementation.
+- **2.0:** All components work together as an integrated system, with an open-source agent harness as the reference implementation. This also marks the start of dogfooding: I plan to use these tools in my own projects.
 
 ## Appendix: OWASP lists
 
