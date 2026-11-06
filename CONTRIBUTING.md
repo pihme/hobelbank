@@ -16,4 +16,4 @@ The tracker is public. Never paste tokens, keys, credentials or real service res
 
 ## Reading locally
 
-This repo is Markdown only. GitHub renders it, including the Mermaid diagram in `README.md`; no build or tests are needed.
+This repo is Markdown only. GitHub renders it; no build or tests are needed.
