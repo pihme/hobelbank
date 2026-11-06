@@ -212,6 +212,13 @@ How the workshop answers the [OWASP Top 10 for LLM Applications 2025](https://ge
 | ASI09 | Human-Agent Trust Exploitation | Partly | The agent never asks for approval, so there is no prompt to talk a person into. |
 | ASI10 | Rogue Agents | Partly | A rogue agent cannot switch off the wall or its log, and it can be stopped and its habitat thrown away. |
 
+## Roadmap
+
+Planned milestones; neither has been released yet.
+
+- **1.0:** MVPs for all components, tested with a closed-source agent harness.
+- **2.0:** All components work together as an integrated system, with an open-source agent harness as the reference implementation.
+
 ## How this project is built
 
 Hobelbank is developed agent-first. AI agents write all of the map, the
