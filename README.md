@@ -28,8 +28,8 @@ Simon Willison calls the dangerous mix the [lethal trifecta](https://simonwillis
 
 The pieces form three layers around one rule: **an agent may do anything inside its world, and everything that controls it lives outside, where it cannot reach.**
 
-1. **Habitat.** Hermetarium boots an agent inside an OCI image, behind a wall. Inside, the agent is root.
-2. **Inhabitants.** Agents that live in a habitat and build software there. Fregoli is one of them; others can move in too.
+1. **Habitat.** Hermetarium starts a habitat: an inhabitant inside an OCI image, behind a wall. Inside, the inhabitant is root.
+2. **Inhabitants.** They live in a habitat and build software there. Fregoli is one of them; others can move in too.
 3. **Wall services.** Everything that sits on the wall, on the only network path: the I/O log today, a package proxy with a scanner later.
 
 Some wall services may use a model of their own, like the AI security scanner. Such **wall agents** are trusted more than inhabitants, because they see what crosses the wall and decide on it. In return they may do far less: no shell and no tools, only reading what they are handed and answering.
@@ -45,7 +45,7 @@ The full map with every piece follows after the table below.
 | Piece | Layer | State | Where |
 | --- | --- | --- | --- |
 | **Hermetarium** | Habitat | [![hermetarium release](https://img.shields.io/github/v/release/pihme/hermetarium?filter=hermetarium%2F*&label=hermetarium)](https://github.com/pihme/hermetarium/releases) [![porter release](https://img.shields.io/github/v/release/pihme/hermetarium?filter=porter%2F*&label=porter)](https://github.com/pihme/hermetarium/releases) | [pihme/hermetarium](https://github.com/pihme/hermetarium) · [website](https://pihme.github.io/hermetarium/) |
-| Sandbox logging | Wall service, part of Hermetarium | Built: Squid access log turned into `io.jsonl`, metadata only | [Hermetarium](https://github.com/pihme/hermetarium) |
+| **I/O log** | Wall service, part of Hermetarium | Built: Squid's access log turned into `io.jsonl`, metadata only | [Hermetarium](https://github.com/pihme/hermetarium) |
 | **Fregoli** | Inhabitant | [![Fregoli release](https://img.shields.io/github/v/release/pihme/fregoli?filter=fregoli%2F*&label=release)](https://github.com/pihme/fregoli/releases) | [pihme/fregoli](https://github.com/pihme/fregoli) · [website](https://pihme.github.io/fregoli/) |
 | **grok-budget-mcp** | Tool for agents | [![grok-budget-mcp release](https://img.shields.io/github/v/release/pihme/grok-budget-mcp?filter=grok-budget-mcp%2F*&label=release)](https://github.com/pihme/grok-budget-mcp/releases) | [pihme/grok-budget-mcp](https://github.com/pihme/grok-budget-mcp) · [website](https://pihme.github.io/grok-budget-mcp/) |
 | **claude-budget-mcp** | Tool for agents | [![claude-budget-mcp release](https://img.shields.io/github/v/release/pihme/claude-budget-mcp?filter=claude-budget-mcp%2F*&label=release)](https://github.com/pihme/claude-budget-mcp/releases), tested live | [pihme/claude-budget-mcp](https://github.com/pihme/claude-budget-mcp) · [website](https://pihme.github.io/claude-budget-mcp/) |
@@ -61,20 +61,20 @@ Dashed lines and boxes are not built yet.
 
 ## How they connect
 
-- **Fregoli lives in Hermetarium.** Fregoli's own image serves its web app, and its docs recommend Hermetarium as the place to run it, but do not require it. It has not moved in yet: the server only binds `127.0.0.1` ([fregoli#1](https://github.com/pihme/fregoli/issues/1)).
+- **Fregoli lives in a habitat.** Fregoli's own image serves its web app, and its docs recommend Hermetarium as the place to run it, but do not require it. It has not moved in yet: the server only binds `127.0.0.1` ([fregoli#1](https://github.com/pihme/fregoli/issues/1)).
 - **Keys never enter the habitat.** Hermetarium's Squid injects API keys from the host-side ACL. grok-budget-mcp inside a habitat would work the same way, with a placeholder `auth.json` in the image and the real token added on the wall.
 - **claude-budget-mcp is the same tool for Claude Code.** It reads the 5-hour and weekly limits from Claude Code's own login and never refreshes the token, so everything said here about grok-budget-mcp applies to it too. Inside a habitat its placeholder would be a `.credentials.json`.
 - **grok-budget-mcp has two possible places.** Inside a habitat, an agent asks how much of its weekly budget is left. Next to the supervisor, a watching agent could put a habitat to sleep when the budget is empty and wake it after the reset. Hermetarium has no sleep and wake yet, and keeping a changed world is still open ([hermetarium#9](https://github.com/pihme/hermetarium/issues/9)).
 - **The scanner shares the wall.** Every package fetch already crosses Squid. A package proxy there would store, scan and re-serve what agents download, using the same choke point and log as the I/O log.
 - **Git Warden keeps Git credentials out of habitats.** Agents push to the warden instead of their Git remote (GitHub, GitLab or any other), and only the warden can write there. It is key injection, applied to Git. Built and released ([pihme/git-warden](https://github.com/pihme/git-warden)).
-- **Helferlein could give an inhabitant's web app a face.** It is an animated 3D avatar that a page summons and drives with events: working while a turn runs, applied when the finished work is on the page, dismiss when the panel closes. Its own demo is such a host, a chat in the lower right. A possible host is an app like Fregoli with its assistant chat; no piece uses it yet, and Helferlein names no host itself ([pihme/helferlein](https://github.com/pihme/helferlein)).
+- **Helferlein could give an inhabitant's web app a face.** It is an animated 3D avatar that a page summons and drives with events: working while a turn runs, applied when the finished work is on the page, dismiss when the panel closes. Its own demo is such a host, a chat in the lower right. A possible host is an app like Fregoli with its chat; no piece uses it yet, and Helferlein names no host itself ([pihme/helferlein](https://github.com/pihme/helferlein)).
 
 ## Design philosophy
 
 1. **Keep it simple.** Each piece does one job with as few moving parts as it can. A small piece is easier to check, to replace and to trust.
 2. **Set and forget.** You set up an agent's world once, and after that the agent never stops to ask you for permission. The decisions live outside, where the agent cannot reach them: inside the habitat it may do anything, and what leaves is checked on the way out.
 3. **Batteries included, assembly required.** Together the pieces make a working setup, but it is meant to be adapted to your own needs: your images, your allowlists, your agents.
-4. **Bricks, not a stack.** The pieces fit together, and each one can be swapped for something else that does the same job: another habitat, another inhabitant, another proxy.
+4. **Bricks, not a stack.** The pieces fit together, and each one can be swapped for something else that does the same job: another habitat, another inhabitant, another gate.
 5. **The good side of Pareto.** Aim for the solution that solves 80% of the problems with a fraction of the effort, and leave the rest out rather than make everything heavier.
 6. **The show must go on.** A check never stops the job. When something looks wrong, it is held back and you are warned, but the agent keeps working. You look at the warning when it suits you.
 
@@ -108,7 +108,7 @@ Projects outside the workshop that solve parts of the same problem. Technical co
 
 [OpenShell](https://github.com/NVIDIA/OpenShell) (Apache-2.0, Rust) runs autonomous agents in isolated sandboxes.
 
-**Counterpart in the workshop:** Hermetarium as a whole, meaning the wall, Squid as the one way out, and keys on the wall.
+**Counterpart in the workshop:** Hermetarium as a whole, meaning the wall, the gate as the one way out, and keys on the wall.
 
 <table>
 <tr><th width="50%">Alike</th><th width="50%">Different</th></tr>
@@ -148,7 +148,7 @@ Anthropic's [devcontainer for Claude Code](https://code.claude.com/docs/en/devco
 
 <table>
 <tr><th width="50%">Alike</th><th width="50%">Different</th></tr>
-<tr valign="top"><td><ul><li>Workloads run in isolated environments.</li></ul></td><td><ul><li>boxd is a cluster. Hermetarium is meant for a few containers, not many.</li></ul></td></tr>
+<tr valign="top"><td><ul><li>Workloads run in isolated environments.</li></ul></td><td><ul><li>boxd is a cluster. Hermetarium is meant for a few habitats, not a cluster.</li></ul></td></tr>
 <tr><td colspan="2"><strong>Touch points:</strong> none so far.</td></tr>
 </table>
 
@@ -175,7 +175,7 @@ Smaller tools that each match one piece of the workshop. Most of them break TLS 
 
 ## More
 
-- [GLOSSARY.md](GLOSSARY.md): the words used across the workshop (habitat, inhabitant, wall, supervisor).
+- [GLOSSARY.md](GLOSSARY.md): the words used across the workshop (habitat, inhabitant, wall, gate, supervisor).
 - [CONTRIBUTING.md](CONTRIBUTING.md): issues are welcome.
 
 ## Roadmap
