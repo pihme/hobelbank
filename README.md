@@ -57,16 +57,16 @@ The full map with every piece follows after the table below.
 
 All released pieces are public and have their own website.
 
-![The full map: habitat with Fregoli and other inhabitants, Squid with a package proxy, a watching agent next to the supervisor, and per habitat a Push Guard in front of the Git remote, with one Backup Guard behind it](docs/images/map.svg)
+![The full map: habitat with Fregoli and other inhabitants, Squid with a package proxy, a watching agent next to the supervisor, and per habitat a Push Guard on the way to the Git remote, and one Backup Guard next to it whose configuration covers every remote](docs/images/map.svg)
 
 Dashed lines and boxes are not built yet.
 
 ## How they connect
 
 - **Fregoli is built to live in a habitat.** Fregoli's own image listens on port 8080; the container image sets `FREGOLI_HOST=0.0.0.0`, a local run binds `127.0.0.1` ([fregoli](https://github.com/pihme/fregoli), [SPEC.md](https://github.com/pihme/fregoli/blob/main/SPEC.md)). Its docs recommend Hermetarium as the place to run it, but do not require it. Not yet in an `omakase/` setup: Fregoli is the second habitat on the roadmap below.
-- **Keys stay on the wall where the wall sets them.** Hermetarium's Squid injects API keys from the host-side ACL, one key per habitat in the current setup. grok-budget-mcp inside a habitat would work the same way, with a placeholder `auth.json` in the image and the real token added on the wall. That promise covers keys the gate file holds: a token that a login inside the habitat receives in a response ends up in the habitat, and so in a backup of its root disk. The setups therefore require that nobody logs in to a service from inside; Git credentials are a case of their own, see Git Warden below.
+- **Keys stay on the wall where the wall sets them.** Hermetarium's Squid holds the keys in the gate file and injects them into the requests it forwards; in the current omakase setup those are the model key and one GitHub token, the latter in two forms. grok-budget-mcp inside a habitat would work the same way, with a placeholder `auth.json` in the image and the real token added on the wall. That promise covers keys the gate file holds: a token that a login inside the habitat receives in a response ends up in the habitat, and so in a backup of its root disk. The setups therefore require that nobody logs in to a service from inside; Git credentials are a case of their own, see Git Warden below.
 - **claude-budget-mcp is the same tool for Claude Code.** It reads the 5-hour and weekly limits from Claude Code's own login and never refreshes the token, so everything said here about grok-budget-mcp applies to it too. Inside a habitat its placeholder would be a `.credentials.json`.
-- **grok-budget-mcp has two possible places.** Inside a habitat, an agent asks how much of its weekly budget is left. Next to the supervisor, a watching agent could put a habitat to sleep when the budget is empty and wake it after the reset. Hermetarium has no sleep and wake yet, and keeping a changed world is still open ([hermetarium#9](https://github.com/pihme/hermetarium/issues/9)).
+- **grok-budget-mcp has two possible places.** Inside a habitat, an agent asks how much of its weekly budget is left. Next to the supervisor, a watching agent could put a habitat to sleep when the budget is empty and wake it after the reset. Hermetarium has no sleep and wake yet, and keeping a changed world would need a snapshot, which is not implemented ([hermetarium SPEC](https://github.com/pihme/hermetarium/blob/main/SPEC.md#10-lifecycle)).
 - **The scanner shares the wall.** Every package fetch already crosses Squid. A package proxy there would store, scan and re-serve what agents download, using the same choke point and log as the I/O log.
 - **Git Warden keeps Git credentials out of habitats.** Agents push to the warden instead of their Git remote (GitHub, GitLab or any other), and only the warden can write there. Each habitat gets its own Push Guard, inside that habitat's wall: the gate sends the agent's pushes only to that guard, and the guard, not the gate, holds the push token. One Backup Guard on a separate host, on a timer, backs up every configured remote: one configuration, an append-only copy of every branch and tag. It is key injection, applied to Git. Built and released ([pihme/git-warden](https://github.com/pihme/git-warden)); a habitat with its own Push Guard is the second habitat on the roadmap below.
 - **Helferlein could give an inhabitant's web app a face.** It is an animated 3D avatar that a page summons and drives with events: working while a turn runs, applied when the finished work is on the page, dismiss when the panel closes. Its own demo is such a host, a chat in the lower right. A possible host is an app like Fregoli with its chat; no piece uses it yet, and Helferlein names no host itself ([pihme/helferlein](https://github.com/pihme/helferlein)).
@@ -182,10 +182,10 @@ Smaller tools that each match one piece of the workshop. Most of them break TLS 
 
 ## Roadmap
 
-Planned milestones; none of the habitats has been released yet, and milestone 2 ("Eating your own dogfood") is still open.
+Milestones in Hermetarium; milestone 2 ("Eating your own dogfood") is still open.
 
 - **Habitats before 2.0:** three setups in Hermetarium's `omakase/`, each with its own milestone in Hermetarium. Milestones 4 and 5 record that they reuse the setup before them.
-  - **Habitat 1: OpenCode terminal** ([milestone](https://github.com/pihme/hermetarium/milestone/3)), in the repo as `omakase/opencode-tui/`. One OpenCode agent on the strong wall, no inbound port, talked to in its terminal. The gate decrypts HTTPS and adds the model key and one GitHub token.
+  - **Habitat 1: OpenCode terminal** ([milestone](https://github.com/pihme/hermetarium/milestone/3), closed; the setup is on `main`), in the repo as `omakase/opencode-tui/`. One OpenCode agent on the strong wall, no inbound port, talked to in its terminal. The gate decrypts HTTPS and adds the model key and one GitHub token.
   - **Habitat 2: Fregoli** ([milestone](https://github.com/pihme/hermetarium/milestone/4)). Fregoli in the browser, its Push Guard for one repository, and the first backup.
   - **Habitat 3: OpenMausBot** ([milestone](https://github.com/pihme/hermetarium/milestone/5)). A small team of bots in one habitat, several repositories behind one Push Guard.
 - **1.0:** MVPs for all components, tested with a closed-source agent harness.
