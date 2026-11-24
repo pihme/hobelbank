@@ -37,7 +37,7 @@ The record of traffic that crosses the wall. Not the session log, which records 
 _Avoid_: access log
 
 **Key injection**:
-API keys stay outside the image. The gate adds them to requests for allowed destinations.
+API keys the gate holds stay outside the image. The gate adds them to requests for allowed destinations. This says nothing about a credential the inhabitant obtains itself, for example a token from a login inside the habitat.
 
 **Wall service**:
 Anything that runs on the wall's network path rather than inside the habitat, such as the I/O log or a future package proxy.
