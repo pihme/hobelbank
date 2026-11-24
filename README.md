@@ -52,7 +52,7 @@ The full map with every piece follows after the table below.
 | **grok-budget-mcp** | Tool for agents | [![grok-budget-mcp release](https://img.shields.io/github/v/release/pihme/grok-budget-mcp?filter=grok-budget-mcp%2F*&label=release)](https://github.com/pihme/grok-budget-mcp/releases) | [pihme/grok-budget-mcp](https://github.com/pihme/grok-budget-mcp) · [website](https://pihme.github.io/grok-budget-mcp/) |
 | **claude-budget-mcp** | Tool for agents | [![claude-budget-mcp release](https://img.shields.io/github/v/release/pihme/claude-budget-mcp?filter=claude-budget-mcp%2F*&label=release)](https://github.com/pihme/claude-budget-mcp/releases), tested live | [pihme/claude-budget-mcp](https://github.com/pihme/claude-budget-mcp) · [website](https://pihme.github.io/claude-budget-mcp/) |
 | Package proxy and AI security scanner | Wall service (or tool inside) | Idea with an architecture sketch | Not public yet |
-| **Git Warden** | Guards between agents and their Git remote: a Push Guard per habitat that checks every push, and one Backup Guard for all that keeps an append-only backup of every branch and tag | [![Git Warden release](https://img.shields.io/github/v/release/pihme/git-warden?sort=semver&label=release)](https://github.com/pihme/git-warden/releases) | [pihme/git-warden](https://github.com/pihme/git-warden) · [website](https://pihme.github.io/git-warden/) |
+| **Git Warden** | Guards between agents and their Git remote: a Push Guard per habitat that checks every push, and one Backup Guard whose configuration covers every remote, keeping an append-only backup of every branch and tag | [![Git Warden release](https://img.shields.io/github/v/release/pihme/git-warden?sort=semver&label=release)](https://github.com/pihme/git-warden/releases) | [pihme/git-warden](https://github.com/pihme/git-warden) · [website](https://pihme.github.io/git-warden/) |
 | **Helferlein** | Building block for an app's web page, outside the three layers: an animated 3D avatar that shows when an agent is working | [![Helferlein release](https://img.shields.io/github/v/release/pihme/helferlein?sort=semver&label=release)](https://github.com/pihme/helferlein/releases) | [pihme/helferlein](https://github.com/pihme/helferlein) · [website](https://pihme.github.io/helferlein/) |
 
 All released pieces are public and have their own website.
@@ -68,7 +68,7 @@ Dashed lines and boxes are not built yet.
 - **claude-budget-mcp is the same tool for Claude Code.** It reads the 5-hour and weekly limits from Claude Code's own login and never refreshes the token, so everything said here about grok-budget-mcp applies to it too. Inside a habitat its placeholder would be a `.credentials.json`.
 - **grok-budget-mcp has two possible places.** Inside a habitat, an agent asks how much of its weekly budget is left. Next to the supervisor, a watching agent could put a habitat to sleep when the budget is empty and wake it after the reset. Hermetarium has no sleep and wake yet, and keeping a changed world is still open ([hermetarium#9](https://github.com/pihme/hermetarium/issues/9)).
 - **The scanner shares the wall.** Every package fetch already crosses Squid. A package proxy there would store, scan and re-serve what agents download, using the same choke point and log as the I/O log.
-- **Git Warden keeps Git credentials out of habitats.** Agents push to the warden instead of their Git remote (GitHub, GitLab or any other), and only the warden can write there. Each habitat gets its own Push Guard, inside that habitat's wall: the gate sends the agent's pushes only to that guard, and the guard, not the gate, holds the push token. One Backup Guard covers all habitats from a separate host on a timer, keeping an append-only backup of every branch and tag. It is key injection, applied to Git. Built and released ([pihme/git-warden](https://github.com/pihme/git-warden)); a habitat with its own Push Guard is the second habitat on the roadmap below.
+- **Git Warden keeps Git credentials out of habitats.** Agents push to the warden instead of their Git remote (GitHub, GitLab or any other), and only the warden can write there. Each habitat gets its own Push Guard, inside that habitat's wall: the gate sends the agent's pushes only to that guard, and the guard, not the gate, holds the push token. One Backup Guard on a separate host, on a timer, backs up every configured remote: one configuration, an append-only copy of every branch and tag. It is key injection, applied to Git. Built and released ([pihme/git-warden](https://github.com/pihme/git-warden)); a habitat with its own Push Guard is the second habitat on the roadmap below.
 - **Helferlein could give an inhabitant's web app a face.** It is an animated 3D avatar that a page summons and drives with events: working while a turn runs, applied when the finished work is on the page, dismiss when the panel closes. Its own demo is such a host, a chat in the lower right. A possible host is an app like Fregoli with its chat; no piece uses it yet, and Helferlein names no host itself ([pihme/helferlein](https://github.com/pihme/helferlein)).
 
 ## Design philosophy
@@ -98,7 +98,7 @@ The risks of giving an agent broad rights are leaking information, leaking or mi
 | **One logged way out.** All traffic leaves through Squid, only to allowlisted destinations, and every request is logged. | Built | Leaking information, a compromised agent | LLM01, LLM02, ASI01, ASI02 |
 | **Keys on the wall.** API keys the gate holds never enter the habitat; Squid adds them on the way out. A token that arrives in a response to a login inside the habitat is the habitat's, and the setups do not log in to services from inside. | Built | Leaking or misusing secrets | ASI03 |
 | **Package proxy and scanner.** Downloads are stored, scanned and served from the wall. | Planned | Downloading malicious code | LLM03, ASI04 |
-| **Git Warden.** Agents push to the warden instead of their Git remote; a Push Guard per habitat holds suspicious changes back and warns, and only it holds the write credential for the remote. One Backup Guard for all habitats keeps an append-only backup of every branch and tag. | Built | Harmful changes to code, harmful changes to infrastructure, leaking or misusing secrets | LLM06, ASI02, ASI03 |
+| **Git Warden.** Agents push to the warden instead of their Git remote; a Push Guard per habitat holds suspicious changes back and warns, and only it holds the write credential for the remote. One Backup Guard on a separate host covers every configured remote, keeping an append-only backup of every branch and tag. | Built | Harmful changes to code, harmful changes to infrastructure, leaking or misusing secrets | LLM06, ASI02, ASI03 |
 
 Harmful changes to infrastructure are reduced the least. The wall protects the host, and Git Warden would catch infrastructure kept as code. But if a cloud API is on the allowlist and its key is added on the wall, an agent can call it directly, as with the Azure CLI in [The problem](#the-problem), and only the allowlist and the log stand in the way.
 
@@ -182,9 +182,9 @@ Smaller tools that each match one piece of the workshop. Most of them break TLS 
 
 ## Roadmap
 
-Planned milestones; none of the habitats has been released yet, and 1.0 is still open.
+Planned milestones; none of the habitats has been released yet, and milestone 2 ("Eating your own dogfood") is still open.
 
-- **Habitats before 2.0:** three setups in Hermetarium's `omakase/`, each with its own milestone in Hermetarium, each reusing the one before.
+- **Habitats before 2.0:** three setups in Hermetarium's `omakase/`, each with its own milestone in Hermetarium. Milestones 4 and 5 record that they reuse the setup before them.
   - **Habitat 1: OpenCode terminal** ([milestone](https://github.com/pihme/hermetarium/milestone/3)), in the repo as `omakase/opencode-tui/`. One OpenCode agent on the strong wall, no inbound port, talked to in its terminal. The gate decrypts HTTPS and adds the model key and one GitHub token.
   - **Habitat 2: Fregoli** ([milestone](https://github.com/pihme/hermetarium/milestone/4)). Fregoli in the browser, its Push Guard for one repository, and the first backup.
   - **Habitat 3: OpenMausBot** ([milestone](https://github.com/pihme/hermetarium/milestone/5)). A small team of bots in one habitat, several repositories behind one Push Guard.
@@ -199,7 +199,7 @@ How the workshop answers the [OWASP Top 10 for LLM Applications 2025](https://ge
 
 | ID | Risk | Addressed | How |
 | --- | --- | --- | --- |
-| LLM01 | Prompt Injection | Partly | The injection itself is not stopped. An injected agent can only reach allowlisted destinations, holds no keys, and every request is logged. |
+| LLM01 | Prompt Injection | Partly | The injection itself is not stopped. An injected agent can only reach allowlisted destinations, every request is logged, and the gate holds the credentials it attaches; a key that a service hands back in a response does land inside the habitat. |
 | LLM02 | Sensitive Information Disclosure | Partly | Data can only leave through Squid to allowlisted destinations, and every request is logged. Allowed destinations such as model APIs remain a way out. |
 | LLM03 | Supply Chain | Partly | Every package fetch crosses Squid and is logged. Scanning what comes in is planned (package proxy and scanner). |
 | LLM04 | Data and Model Poisoning | No | Training data and models are outside the workshop. |
@@ -214,7 +214,7 @@ How the workshop answers the [OWASP Top 10 for LLM Applications 2025](https://ge
 
 | ID | Risk | Addressed | How |
 | --- | --- | --- | --- |
-| ASI01 | Agent Goal Hijack | Partly | As with LLM01: a hijacked agent stays behind the wall, with no keys and a logged, allowlisted way out. |
+| ASI01 | Agent Goal Hijack | Partly | As with LLM01: a hijacked agent stays behind the wall, with a logged, allowlisted way out, and no access to the credentials the gate attaches. |
 | ASI02 | Tool Misuse and Exploitation | Partly | Tools run inside the habitat, so their effects outside are limited to the allowlist. Checking what reaches the Git remote is built (Git Warden). |
 | ASI03 | Identity and Privilege Abuse | Partly | API keys the gate holds never enter the habitat; Squid adds them on the way out. Keeping Git credentials out is built (Git Warden). |
 | ASI04 | Agentic Supply Chain Vulnerabilities | Partly | Downloads are logged at the wall. Scanning them is planned (package proxy and scanner). |
