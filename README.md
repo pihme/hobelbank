@@ -29,12 +29,14 @@ Simon Willison calls the dangerous mix the [lethal trifecta](https://simonwillis
 The pieces form three layers around one rule: **an agent may do anything inside its world, and everything that controls it lives outside, where it cannot reach.**
 
 1. **Habitat.** Hermetarium starts a habitat: an inhabitant inside an OCI image, behind a wall. Inside, the inhabitant is root.
-2. **Inhabitants.** They live in a habitat and build software there. Fregoli is one of them; others can move in too.
+2. **Inhabitants.** They live in a habitat and build software there. Fregoli is one of them; others can move in too. Hermetarium's own inhabitants already run behind its gate. Fregoli is not one of them yet: it comes with the second habitat in Hermetarium's `omakase/` ([milestone Habitat 2](https://github.com/pihme/hermetarium/milestone/4)).
 3. **Wall services.** Everything that sits on the wall, on the only network path: the I/O log today, a package proxy with a scanner later.
 
 Some wall services may use a model of their own, like the AI security scanner. Such **wall agents** are trusted more than inhabitants, because they see what crosses the wall and decide on it. In return they may do far less: no shell and no tools, only reading what they are handed and answering.
 
 Around the habitat sit tools the agents use, like grok-budget-mcp and claude-budget-mcp, and guards on the way to the Git remote, like Git Warden. Helferlein is a building block for the pages an inhabitant serves, not part of the wall.
+
+Hermetarium itself stays a kit. `omakase/` in its repo holds the complete setups the owner runs: hardened, written out in full, and tried in practice. The first is OpenCode in a terminal, the first habitat on the roadmap below.
 
 ![The essential pieces: a supervisor starts an inhabitant behind a wall, and all its traffic leaves through Squid](docs/images/overview.svg)
 
@@ -50,23 +52,23 @@ The full map with every piece follows after the table below.
 | **grok-budget-mcp** | Tool for agents | [![grok-budget-mcp release](https://img.shields.io/github/v/release/pihme/grok-budget-mcp?filter=grok-budget-mcp%2F*&label=release)](https://github.com/pihme/grok-budget-mcp/releases) | [pihme/grok-budget-mcp](https://github.com/pihme/grok-budget-mcp) · [website](https://pihme.github.io/grok-budget-mcp/) |
 | **claude-budget-mcp** | Tool for agents | [![claude-budget-mcp release](https://img.shields.io/github/v/release/pihme/claude-budget-mcp?filter=claude-budget-mcp%2F*&label=release)](https://github.com/pihme/claude-budget-mcp/releases), tested live | [pihme/claude-budget-mcp](https://github.com/pihme/claude-budget-mcp) · [website](https://pihme.github.io/claude-budget-mcp/) |
 | Package proxy and AI security scanner | Wall service (or tool inside) | Idea with an architecture sketch | Not public yet |
-| **Git Warden** | Guards between agents and their Git remote: a Push Guard that checks every push, a Backup Guard that keeps an append-only backup of every branch and tag | [![Git Warden release](https://img.shields.io/github/v/release/pihme/git-warden?sort=semver&label=release)](https://github.com/pihme/git-warden/releases) | [pihme/git-warden](https://github.com/pihme/git-warden) · [website](https://pihme.github.io/git-warden/) |
+| **Git Warden** | Guards between agents and their Git remote: a Push Guard per habitat that checks every push, and one Backup Guard whose configuration covers every remote, keeping an append-only backup of every branch and tag | [![Git Warden release](https://img.shields.io/github/v/release/pihme/git-warden?sort=semver&label=release)](https://github.com/pihme/git-warden/releases) | [pihme/git-warden](https://github.com/pihme/git-warden) · [website](https://pihme.github.io/git-warden/) |
 | **Helferlein** | Building block for an app's web page, outside the three layers: an animated 3D avatar that shows when an agent is working | [![Helferlein release](https://img.shields.io/github/v/release/pihme/helferlein?sort=semver&label=release)](https://github.com/pihme/helferlein/releases) | [pihme/helferlein](https://github.com/pihme/helferlein) · [website](https://pihme.github.io/helferlein/) |
 
 All released pieces are public and have their own website.
 
-![The full map: habitat with Fregoli and other inhabitants, Squid with a package proxy, a watching agent next to the supervisor, and Git Warden in front of the Git remote](docs/images/map.svg)
+![The full map: habitat with Fregoli and other inhabitants, Squid with a package proxy, a watching agent next to the supervisor, and per habitat a Push Guard on the way to the Git remote, and one Backup Guard next to it whose configuration covers every remote](docs/images/map.svg)
 
 Dashed lines and boxes are not built yet.
 
 ## How they connect
 
-- **Fregoli lives in a habitat.** Fregoli's own image serves its web app, and its docs recommend Hermetarium as the place to run it, but do not require it. It has not moved in yet: the server only binds `127.0.0.1` ([fregoli#1](https://github.com/pihme/fregoli/issues/1)).
-- **Keys never enter the habitat.** Hermetarium's Squid injects API keys from the host-side ACL. grok-budget-mcp inside a habitat would work the same way, with a placeholder `auth.json` in the image and the real token added on the wall.
+- **Fregoli is built to live in a habitat.** Fregoli's own image listens on port 8080; the container image sets `FREGOLI_HOST=0.0.0.0`, a local run binds `127.0.0.1` ([fregoli](https://github.com/pihme/fregoli), [SPEC.md](https://github.com/pihme/fregoli/blob/main/SPEC.md)). Its docs recommend Hermetarium as the place to run it, but do not require it. Not yet in an `omakase/` setup: Fregoli is the second habitat on the roadmap below.
+- **Keys stay on the wall where the wall sets them.** Hermetarium's Squid holds the keys in the gate file and injects them into the requests it forwards; in the current omakase setup those are the model key and one GitHub token, the latter in two forms. grok-budget-mcp inside a habitat would work the same way, with a placeholder `auth.json` in the image and the real token added on the wall. That promise covers keys the gate file holds: a token that a login inside the habitat receives in a response ends up in the habitat, and so in a backup of its root disk. The setups therefore require that nobody logs in to a service from inside; Git credentials are a case of their own, see Git Warden below.
 - **claude-budget-mcp is the same tool for Claude Code.** It reads the 5-hour and weekly limits from Claude Code's own login and never refreshes the token, so everything said here about grok-budget-mcp applies to it too. Inside a habitat its placeholder would be a `.credentials.json`.
-- **grok-budget-mcp has two possible places.** Inside a habitat, an agent asks how much of its weekly budget is left. Next to the supervisor, a watching agent could put a habitat to sleep when the budget is empty and wake it after the reset. Hermetarium has no sleep and wake yet, and keeping a changed world is still open ([hermetarium#9](https://github.com/pihme/hermetarium/issues/9)).
+- **grok-budget-mcp has two possible places.** Inside a habitat, an agent asks how much of its weekly budget is left. Next to the supervisor, a watching agent could put a habitat to sleep when the budget is empty and wake it after the reset. Hermetarium has no sleep and wake yet, and keeping a changed world would need a snapshot, which is not implemented ([hermetarium SPEC](https://github.com/pihme/hermetarium/blob/main/SPEC.md#10-lifecycle)).
 - **The scanner shares the wall.** Every package fetch already crosses Squid. A package proxy there would store, scan and re-serve what agents download, using the same choke point and log as the I/O log.
-- **Git Warden keeps Git credentials out of habitats.** Agents push to the warden instead of their Git remote (GitHub, GitLab or any other), and only the warden can write there. It is key injection, applied to Git. Built and released ([pihme/git-warden](https://github.com/pihme/git-warden)).
+- **Git Warden keeps Git credentials out of habitats.** Agents push to the warden instead of their Git remote (GitHub, GitLab or any other), and only the warden can write there. Each habitat gets its own Push Guard, inside that habitat's wall: the gate sends the agent's pushes only to that guard, and the guard, not the gate, holds the push token. One Backup Guard on a separate host, on a timer, backs up every configured remote: one configuration, an append-only copy of every branch and tag. It is key injection, applied to Git. Built and released ([pihme/git-warden](https://github.com/pihme/git-warden)); a habitat with its own Push Guard is the second habitat on the roadmap below.
 - **Helferlein could give an inhabitant's web app a face.** It is an animated 3D avatar that a page summons and drives with events: working while a turn runs, applied when the finished work is on the page, dismiss when the panel closes. Its own demo is such a host, a chat in the lower right. A possible host is an app like Fregoli with its chat; no piece uses it yet, and Helferlein names no host itself ([pihme/helferlein](https://github.com/pihme/helferlein)).
 
 ## Design philosophy
@@ -82,7 +84,7 @@ Dashed lines and boxes are not built yet.
 
 - Freedom inside, control outside. The agent cannot switch off the wall or its log.
 - One logged network path. If it cannot be set up, the habitat does not start.
-- Secrets stay outside the image and are added on the way out.
+- Secrets stay outside the image where the wall sets them: keys the gate holds are added on the way out.
 - Things are reversible: habitats can be thrown away, Fregoli's plugins can be unloaded.
 - Less unchecked foreign code: agents write most of their own code, and what they download is logged.
 
@@ -94,9 +96,9 @@ The risks of giving an agent broad rights are leaking information, leaking or mi
 | --- | --- | --- | --- |
 | **The wall.** Everything the agent runs, including downloaded code, runs inside the habitat behind runc or Firecracker, and the habitat can be thrown away. | Built | Downloading malicious code, a compromised agent, harmful changes to infrastructure (the host is out of reach) | LLM05, ASI05, ASI08, ASI10 |
 | **One logged way out.** All traffic leaves through Squid, only to allowlisted destinations, and every request is logged. | Built | Leaking information, a compromised agent | LLM01, LLM02, ASI01, ASI02 |
-| **Keys on the wall.** API keys never enter the habitat; Squid adds them on the way out. | Built | Leaking or misusing secrets | ASI03 |
+| **Keys on the wall.** API keys the gate holds never enter the habitat; Squid adds them on the way out. A token that arrives in a response to a login inside the habitat is the habitat's, and the setups do not log in to services from inside. | Built | Leaking or misusing secrets | ASI03 |
 | **Package proxy and scanner.** Downloads are stored, scanned and served from the wall. | Planned | Downloading malicious code | LLM03, ASI04 |
-| **Git Warden.** Agents push to the warden instead of their Git remote; it holds suspicious changes back and warns, and only it holds the credential for the remote. A separate Backup Guard keeps an append-only backup of every branch and tag. | Built | Harmful changes to code, harmful changes to infrastructure, leaking or misusing secrets | LLM06, ASI02, ASI03 |
+| **Git Warden.** Agents push to the warden instead of their Git remote; a Push Guard per habitat holds suspicious changes back and warns, and only it holds the write credential for the remote. One Backup Guard on a separate host covers every configured remote, keeping an append-only backup of every branch and tag. | Built | Harmful changes to code, harmful changes to infrastructure, leaking or misusing secrets | LLM06, ASI02, ASI03 |
 
 Harmful changes to infrastructure are reduced the least. The wall protects the host, and Git Warden would catch infrastructure kept as code. But if a cloud API is on the allowlist and its key is added on the wall, an agent can call it directly, as with the Azure CLI in [The problem](#the-problem), and only the allowlist and the log stand in the way.
 
@@ -112,7 +114,7 @@ Projects outside the workshop that solve parts of the same problem. Technical co
 
 <table>
 <tr><th width="50%">Alike</th><th width="50%">Different</th></tr>
-<tr valign="top"><td><ul><li>A wall around the agent.</li><li>One controlled way out through a proxy.</li><li>Credentials kept outside.</li><li>An audit log.</li></ul></td><td><ul><li>The agent never runs as root and is also restricted inside (Landlock, seccomp). Hermetarium lets it be root and relies on the wall alone.</li><li>Egress rules are policies per host, port and calling binary, with inspection of REST, GraphQL and MCP traffic, which means breaking TLS. Hermetarium uses a Squid allowlist and leaves TLS alone.</li><li>A control plane with multi-tenancy, SDKs and a TUI. Hermetarium is a local tool without a control plane or telemetry.</li></ul></td></tr>
+<tr valign="top"><td><ul><li>A wall around the agent.</li><li>One controlled way out through a proxy.</li><li>Credentials kept outside.</li><li>An audit log.</li></ul></td><td><ul><li>The agent never runs as root and is also restricted inside (Landlock, seccomp). Hermetarium lets it be root and relies on the wall alone.</li><li>Egress rules are policies per host, port and calling binary, with inspection of REST, GraphQL and MCP traffic. Hermetarium has no per-binary policy; its gate decrypts HTTPS only where the gate file opens it (`OPEN-HTTPS` or an open-web gate file), and the setups in `omakase/` decrypt by default. Bodies are never kept.</li><li>A control plane with multi-tenancy, SDKs and a TUI. Hermetarium is a local tool without a control plane or telemetry.</li></ul></td></tr>
 <tr><td colspan="2"><strong>Touch points:</strong> a package proxy or scanner as OpenShell middleware, Fregoli as an inhabitant of an OpenShell sandbox.</td></tr>
 </table>
 
@@ -154,7 +156,7 @@ Anthropic's [devcontainer for Claude Code](https://code.claude.com/docs/en/devco
 
 ### More projects, by counterpart
 
-Smaller tools that each match one piece of the workshop. Most of them break TLS to look inside requests, which Hermetarium does not do.
+Smaller tools that each match one piece of the workshop. Most of them break TLS to look inside requests; Hermetarium decrypts only where its gate file opens HTTPS, and keeps no request bodies.
 
 | Counterpart | Project | What it does |
 | --- | --- | --- |
@@ -180,8 +182,12 @@ Smaller tools that each match one piece of the workshop. Most of them break TLS 
 
 ## Roadmap
 
-Planned milestones; neither has been released yet.
+Milestones in Hermetarium; milestone 2 ("Eating your own dogfood") is still open.
 
+- **Habitats before 2.0:** three setups in Hermetarium's `omakase/`, each with its own milestone in Hermetarium. Milestones 4 and 5 record that they reuse the setup before them.
+  - **Habitat 1: OpenCode terminal** ([milestone](https://github.com/pihme/hermetarium/milestone/3), closed; the setup is on `main`), in the repo as `omakase/opencode-tui/`. One OpenCode agent on the strong wall, no inbound port, talked to in its terminal. The gate decrypts HTTPS and adds the model key and one GitHub token.
+  - **Habitat 2: Fregoli** ([milestone](https://github.com/pihme/hermetarium/milestone/4)). Fregoli in the browser, its Push Guard for one repository, and the first backup.
+  - **Habitat 3: OpenMausBot** ([milestone](https://github.com/pihme/hermetarium/milestone/5)). A small team of bots in one habitat, several repositories behind one Push Guard.
 - **1.0:** MVPs for all components, tested with a closed-source agent harness.
 - **2.0:** All components work together as an integrated system, with an open-source agent harness as the reference implementation. This also marks the start of dogfooding: I plan to use these tools in my own projects.
 
@@ -193,13 +199,13 @@ How the workshop answers the [OWASP Top 10 for LLM Applications 2025](https://ge
 
 | ID | Risk | Addressed | How |
 | --- | --- | --- | --- |
-| LLM01 | Prompt Injection | Partly | The injection itself is not stopped. An injected agent can only reach allowlisted destinations, holds no keys, and every request is logged. |
+| LLM01 | Prompt Injection | Partly | The injection itself is not stopped. An injected agent can only reach allowlisted destinations, every request is logged, and the gate holds the credentials it attaches; a key that a service hands back in a response does land inside the habitat. |
 | LLM02 | Sensitive Information Disclosure | Partly | Data can only leave through Squid to allowlisted destinations, and every request is logged. Allowed destinations such as model APIs remain a way out. |
 | LLM03 | Supply Chain | Partly | Every package fetch crosses Squid and is logged. Scanning what comes in is planned (package proxy and scanner). |
 | LLM04 | Data and Model Poisoning | No | Training data and models are outside the workshop. |
 | LLM05 | Improper Output Handling | Partly | Whatever the agent runs from model output runs inside the habitat, behind the wall, and the habitat can be thrown away. |
 | LLM06 | Excessive Agency | Partly | The agent gets broad rights on purpose, and the wall limits what they reach outside. Checking pushes to the Git remote is built (Git Warden). |
-| LLM07 | System Prompt Leakage | No | Prompts are the inhabitant's business. Keys are never in them, because they are added on the wall. |
+| LLM07 | System Prompt Leakage | No | Prompts are the inhabitant's business. Keys the gate holds are never in them, because they are added on the wall. |
 | LLM08 | Vector and Embedding Weaknesses | No | Outside the workshop. |
 | LLM09 | Misinformation | No | Outside the workshop. |
 | LLM10 | Unbounded Consumption | Partly | grok-budget-mcp and claude-budget-mcp show how much budget is left. Putting a habitat to sleep when it runs out is not built yet. |
@@ -208,9 +214,9 @@ How the workshop answers the [OWASP Top 10 for LLM Applications 2025](https://ge
 
 | ID | Risk | Addressed | How |
 | --- | --- | --- | --- |
-| ASI01 | Agent Goal Hijack | Partly | As with LLM01: a hijacked agent stays behind the wall, with no keys and a logged, allowlisted way out. |
+| ASI01 | Agent Goal Hijack | Partly | As with LLM01: a hijacked agent stays behind the wall, with a logged, allowlisted way out, and no access to the credentials the gate attaches. |
 | ASI02 | Tool Misuse and Exploitation | Partly | Tools run inside the habitat, so their effects outside are limited to the allowlist. Checking what reaches the Git remote is built (Git Warden). |
-| ASI03 | Identity and Privilege Abuse | Partly | API keys never enter the habitat; Squid adds them on the way out. Keeping Git credentials out is built (Git Warden). |
+| ASI03 | Identity and Privilege Abuse | Partly | API keys the gate holds never enter the habitat; Squid adds them on the way out. Keeping Git credentials out is built (Git Warden). |
 | ASI04 | Agentic Supply Chain Vulnerabilities | Partly | Downloads are logged at the wall. Scanning them is planned (package proxy and scanner). |
 | ASI05 | Unexpected Code Execution | Yes | Running code is expected: it runs inside the habitat, behind runc or, for a stronger wall, Firecracker, and the habitat can be thrown away. |
 | ASI06 | Memory and Context Poisoning | No | An agent's memory is the inhabitant's business. |

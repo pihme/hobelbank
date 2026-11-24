@@ -64,3 +64,5 @@ Single-context: no `SPEC.md` here; terms in root `GLOSSARY.md`. See `docs/agents
 ## Diagrams
 
 `docs/images/overview.svg` and `docs/images/map.svg` are generated in the same style as the other projects' architecture diagrams. Change the generator and re-run it; do not edit the SVGs by hand.
+
+The owner accepted hand edits on 24 Nov 2026 for #23, because no generator exists in this repo or on the build machine. Until one is added, edit them by hand, keep them to valid SVG, and check both files with `python3 -c "import xml.dom.minidom;xml.dom.minidom.parse('docs/images/map.svg')"` before committing.
